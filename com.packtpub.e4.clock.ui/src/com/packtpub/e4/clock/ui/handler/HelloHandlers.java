@@ -5,7 +5,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 
@@ -20,15 +23,32 @@ public class HelloHandlers extends AbstractHandler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					monitor.beginTask("Preparing", 5000);
-					for (int i = 0; i < 50 && !monitor.isCanceled(); i++) {
+					SubMonitor subMonitor = SubMonitor.convert(monitor, "Preparing", 5000);
+//					monitor.beginTask("Preparing", 5000);
+					for (int i = 0; i < 50 && !subMonitor.isCanceled(); i++) {
+						switch(i) {
+						case 10:
+							subMonitor.subTask("Doing something");
+							break;
+						case 25:
+							subMonitor.subTask("Doing something else");
+							break;
+						case 40:
+							subMonitor.subTask("Nearly there");
+							break;
+						case 12: 
+							checkDozen(subMonitor.newChild(100));
+							continue;
+						}
 						Thread.sleep(100);
-						monitor.worked(100);
+						subMonitor.worked(100);
 					}
 				} catch (InterruptedException e) {
 					
 				} finally {
-					monitor.done();
+					if (monitor != null) {
+						monitor.done();
+					}
 				}
 				if (!monitor.isCanceled()) {
 					UIJob uiJob = new UIJob() {
@@ -41,6 +61,25 @@ public class HelloHandlers extends AbstractHandler {
 					uiJob.execute();
 				}
 				return Status.OK_STATUS;
+			}
+
+			private void checkDozen(IProgressMonitor monitor) {
+				try {
+					if (monitor == null) {
+						monitor = new NullProgressMonitor();
+					}
+					monitor.beginTask("Check a dozen", 12);
+					for (int i = 0; i < 12; i++) {
+						monitor.subTask("changing " + i);
+						Thread.sleep(100);
+						monitor.worked(1);
+					}
+				} catch (Exception e) {
+					
+				} finally {
+					monitor.done();
+				}
+				
 			}
 		};
 		job.schedule();
