@@ -62,7 +62,6 @@
       </handler>
       <handler class="com.packtpub.e4.clock.ui.handler.HelloHandlers" commandId="com.packtpub.e4.clock.ui.test"  />
       <handler class="com.packtpub.e4.clock.ui.handler.ShowTheTime" commandId="com.packtpub.e4.clock.ui.command.showTheTime"  />
-      
    </extension>
 
 	<extension point="org.eclipse.ui.menus">
@@ -72,11 +71,23 @@
 				<reference definitionId="when.hello.is.active"/>
 			</visibleWhen>
 		</menuContribution>
-		<menuContribution allPopups="false" locationURI="poput:com.packtpub.e4.clock.ui.TimeZoneTableView?after=additions">
+		<menuContribution allPopups="false" locationURI="popup:com.packtpub.e4.clock.ui.TimeZoneTableView?after=additions">
 			<command commandId="com.packtpub.e4.clock.ui.test" label="hello xml test" style="push" />
 		</menuContribution>
-		<menuContribution allPopups="false" locationURI="poput:org.eclipse.ui.popup.any">
-			<command commandId="com.packtpub.e4.clock.ui.test" label="" style="push" />
+		<menuContribution allPopups="false" locationURI="popup:org.eclipse.ui.popup.any">
+			<command commandId="com.packtpub.e4.clock.ui.command.showTheTime" label="Show the time" style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<iterate ifEmpty="false">
+							<adapt type="java.util.TimeZone"/>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution allPopups="false" locationURI="com.packtpub.e4.clock.ui.TimeZoneTreeView">
+			<command commandId="com.packtpub.e4.clock.ui.command.showTheTime" label="Clock menu" style="push">
+			</command>
 		</menuContribution>
 	</extension>
  <extension
