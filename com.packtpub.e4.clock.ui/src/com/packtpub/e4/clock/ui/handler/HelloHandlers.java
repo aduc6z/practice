@@ -17,7 +17,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.progress.IProgressConstants2;
+import org.eclipse.ui.statushandlers.StatusManager;
 
+import com.packtpub.e4.clock.ui.Activator;
 import com.packtpub.e4.clock.ui.internal.UIJob;
 
 public class HelloHandlers extends AbstractHandler {
@@ -31,6 +33,7 @@ public class HelloHandlers extends AbstractHandler {
 				try {
 					SubMonitor subMonitor = SubMonitor.convert(monitor, "Preparing", 5000);
 //					monitor.beginTask("Preparing", 5000);
+//					subMonitor = null; // Add null to check error logging mechanism
 					for (int i = 0; i < 50 && !subMonitor.isCanceled(); i++) {
 						switch(i) {
 						case 10:
@@ -49,6 +52,11 @@ public class HelloHandlers extends AbstractHandler {
 						Thread.sleep(100);
 						subMonitor.worked(100);
 					}
+				} catch(NullPointerException ex) {
+//					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Programming bug?", ex); // Log error to error log of Eclipse
+					StatusManager statusManager = StatusManager.getManager();
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Programming bug?", ex);
+					statusManager.handle(status, StatusManager.LOG | StatusManager.SHOW); // Add show to display error dialog
 				} catch (InterruptedException e) {
 					
 				} finally {
@@ -91,9 +99,10 @@ public class HelloHandlers extends AbstractHandler {
 		ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
 		Command command = service == null ? null : service.getCommand("com.packtpub.e4.clock.ui.command.hello");
 		if (command != null) {
-//			job.setProperty(IProgressConstants2.COMMAND_PROPERTY, command); // Need parameterized command
+//			job.setProperty(IProgressConstants2.COMMAND_PROPERTY, command); // Won't work - Need parameterized command
 			job.setProperty(IProgressConstants2.COMMAND_PROPERTY, ParameterizedCommand.generateCommand(command, null));
 			job.setProperty(IProgressConstants2.ICON_PROPERTY, ImageDescriptor.createFromURL(HelloHandlers.class.getResource("/icons/samle.gif")));
+			job.setProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, true); // NO effect found yet - try again on Mac OS
 		}
 		job.schedule();
 		return null;
