@@ -20,9 +20,15 @@ public class HelloHandlers extends AbstractHandler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					Thread.sleep(5000);
+					monitor.beginTask("Preparing", 5000);
+					for (int i = 0; i < 50; i++) {
+						Thread.sleep(100);
+						monitor.worked(100);
+					}
 				} catch (InterruptedException e) {
 					
+				} finally {
+					monitor.done();
 				}
 				UIJob uiJob = new UIJob() {
 					
