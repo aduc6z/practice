@@ -21,7 +21,7 @@ public class HelloHandlers extends AbstractHandler {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					monitor.beginTask("Preparing", 5000);
-					for (int i = 0; i < 50; i++) {
+					for (int i = 0; i < 50 && !monitor.isCanceled(); i++) {
 						Thread.sleep(100);
 						monitor.worked(100);
 					}
@@ -30,14 +30,16 @@ public class HelloHandlers extends AbstractHandler {
 				} finally {
 					monitor.done();
 				}
-				UIJob uiJob = new UIJob() {
-					
-					@Override
-					public void runInUIThread() {
-						MessageDialog.openInformation(null, "Hello", "World");
-					}
-				};
-				uiJob.execute();
+				if (!monitor.isCanceled()) {
+					UIJob uiJob = new UIJob() {
+						
+						@Override
+						public void runInUIThread() {
+							MessageDialog.openInformation(null, "Hello", "World");
+						}
+					};
+					uiJob.execute();
+				}
 				return Status.OK_STATUS;
 			}
 		};
