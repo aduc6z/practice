@@ -56,9 +56,9 @@
    
    <extension point="org.eclipse.ui.handlers">
       <handler class="com.packtpub.e4.clock.ui.handler.HelloHandlers" commandId="com.packtpub.e4.clock.ui.command.hello" >
-      	<enabledWhen>
+      	<!--enabledWhen>
       		<reference definitionId="when.hello.is.active" />
-      	</enabledWhen>
+      	</enabledWhen-->
       </handler>
       <handler class="com.packtpub.e4.clock.ui.handler.HelloHandlers" commandId="com.packtpub.e4.clock.ui.test"  />
       <handler class="com.packtpub.e4.clock.ui.handler.ShowTheTime" commandId="com.packtpub.e4.clock.ui.command.showTheTime"  />
@@ -66,10 +66,11 @@
 
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution allPopups="false" locationURI="menu:help?after=additions">
-			<command commandId="com.packtpub.e4.clock.ui.command.hello" label="hello xml" style="push" />
-			<visibleWhen>
+			<command commandId="com.packtpub.e4.clock.ui.command.hello" label="hello xml" style="push">
+			<!--visibleWhen>
 				<reference definitionId="when.hello.is.active"/>
-			</visibleWhen>
+			</visibleWhen-->
+			</command>
 		</menuContribution>
 		<menuContribution allPopups="false" locationURI="popup:com.packtpub.e4.clock.ui.TimeZoneTableView?after=additions">
 			<command commandId="com.packtpub.e4.clock.ui.test" label="hello xml test" style="push" />
