@@ -8,7 +8,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
+
+import com.packtpub.e4.clock.ui.internal.UIJob;
 
 public class HelloHandlers extends AbstractHandler {
 
@@ -23,13 +24,14 @@ public class HelloHandlers extends AbstractHandler {
 				} catch (InterruptedException e) {
 					
 				}
-//				MessageDialog.openInformation(null, "Hello", "World");
-				Display.getDefault().asyncExec(new Runnable() {
+				UIJob uiJob = new UIJob() {
+					
 					@Override
-					public void run() {
+					public void runInUIThread() {
 						MessageDialog.openInformation(null, "Hello", "World");
 					}
-				});
+				};
+				uiJob.execute();
 				return Status.OK_STATUS;
 			}
 		};
