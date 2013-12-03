@@ -79,6 +79,9 @@ public class Activator extends AbstractUIPlugin {
 				}
 			}
 		});
+		int lauchCount = getPreferenceStore().getInt("launchCount");
+		System.out.println("I have been launched " + lauchCount + " times");
+		getPreferenceStore().setValue("launchCount", lauchCount + 1);
 	}
 
 	/*

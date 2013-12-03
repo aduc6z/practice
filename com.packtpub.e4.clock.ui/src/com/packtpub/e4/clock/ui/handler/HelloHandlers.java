@@ -56,7 +56,7 @@ public class HelloHandlers extends AbstractHandler {
 //					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Programming bug?", ex); // Log error to error log of Eclipse
 					StatusManager statusManager = StatusManager.getManager();
 					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Programming bug?", ex);
-					statusManager.handle(status, StatusManager.LOG | StatusManager.SHOW); // Add show to display error dialog
+					statusManager.handle(status, StatusManager.LOG | StatusManager.SHOW); // Add show to display error dialog. Add BLOCK flag to force synchronous error message 
 				} catch (InterruptedException e) {
 					
 				} finally {
