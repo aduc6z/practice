@@ -29,14 +29,22 @@ public class MinimarkVisitor implements IResourceProxyVisitor, IResourceDeltaVis
 		boolean deleted = (IResourceDelta.REMOVED & delta.getKind()) != 0;
 		IResource resource = delta.getResource();
 		String name = resource.getName();
-		if (deleted) {
-			String htmlName = name.replace(".minimark", ".html");
-			IFile htmlFile = resource.getParent().getFile(new Path(htmlName));
-			if (htmlFile.exists()) {
-				htmlFile.delete(true, null);
+		if (name.endsWith(".minimark")) {
+			if (deleted) {
+				String htmlName = name.replace(".minimark", ".html");
+				IFile htmlFile = resource.getParent().getFile(new Path(htmlName));
+				if (htmlFile.exists()) {
+					htmlFile.delete(true, null);
+				}
+			} else {
+				processResource(resource);
+			}	
+		} else if(name.endsWith(".html")) {
+			String minimarkName = name.replace(".html", ".minimark");
+			IFile minimarkFile = resource.getParent().getFile(new Path(minimarkName));
+			if (minimarkFile.exists()) {
+				processResource(minimarkFile);
 			}
-		} else {
-			processResource(resource);
 		}
 		return true;
 	}
