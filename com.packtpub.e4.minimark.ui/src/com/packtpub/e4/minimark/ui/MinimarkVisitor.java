@@ -26,8 +26,11 @@ public class MinimarkVisitor implements IResourceProxyVisitor, IResourceDeltaVis
 
 	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
-		// TODO Auto-generated method stub
-		return false;
+		IResource resource = delta.getResource();
+		if (resource.getName().endsWith(".minimark")) {
+			processResource(resource);
+		} 
+		return true;
 	}
 
 	@Override
