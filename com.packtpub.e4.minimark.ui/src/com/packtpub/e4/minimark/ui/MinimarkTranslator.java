@@ -7,6 +7,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+/**
+ * Class used to convert file content from plain text to html format
+ * Used by builder to translate file content
+ * @author duc
+ *
+ */
 public class MinimarkTranslator {
 	
 	public static void convert(Reader reader, Writer writer) throws IOException {
