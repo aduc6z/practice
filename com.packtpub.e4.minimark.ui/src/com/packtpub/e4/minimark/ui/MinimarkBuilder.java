@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class MinimarkBuilder extends IncrementalProjectBuilder {
 
+	public static final String ID = "com.packtpub.e4.minimark.ui.MinimarkBuilder";
+	
 	@Override
 	protected IProject[] build(int kind, Map<String, String> args,	IProgressMonitor monitor) throws CoreException {
 		switch (kind) {
