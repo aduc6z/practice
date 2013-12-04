@@ -26,10 +26,18 @@ public class MinimarkVisitor implements IResourceProxyVisitor, IResourceDeltaVis
 
 	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
+		boolean deleted = (IResourceDelta.REMOVED & delta.getKind()) != 0;
 		IResource resource = delta.getResource();
-		if (resource.getName().endsWith(".minimark")) {
+		String name = resource.getName();
+		if (deleted) {
+			String htmlName = name.replace(".minimark", ".html");
+			IFile htmlFile = resource.getParent().getFile(new Path(htmlName));
+			if (htmlFile.exists()) {
+				htmlFile.delete(true, null);
+			}
+		} else {
 			processResource(resource);
-		} 
+		}
 		return true;
 	}
 
@@ -44,7 +52,7 @@ public class MinimarkVisitor implements IResourceProxyVisitor, IResourceDeltaVis
 	}
 	
 	void processResource(IResource resource) throws CoreException {
-		if (resource instanceof IFile) {
+		if (resource instanceof IFile && resource.exists()) {
 			try {
 				IFile file = (IFile) resource;
 				String htmlName = file.getName().replace(".minimark", ".html");
