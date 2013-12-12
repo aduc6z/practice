@@ -6,6 +6,7 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_hksvWV2oEeOkzIdXVsUuCg">
           <children xsi:type="basic:PartStack" xmi:id="_hktWYF2oEeOkzIdXVsUuCg">
             <children xsi:type="basic:Part" xmi:id="__tG34F2pEeOkzIdXVsUuCg" elementId="com.packtpub.e4.application.part.0" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.parts.Hello" label="Hello" closeable="true"/>
+            <children xsi:type="basic:Part" xmi:id="_nzGM0GLuEeOF07_3PQbCPw" elementId="com.packtpub.e4.application.part.1" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.parts.Rainbow" label="Rainbow"/>
           </children>
         </children>
       </children>
