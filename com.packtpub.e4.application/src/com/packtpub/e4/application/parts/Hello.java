@@ -6,6 +6,7 @@ import javax.inject.Named;
 
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.SWT;
@@ -32,6 +33,12 @@ public class Hello {
 		if (selection != null) {
 			label.setText(selection.toString());
 		}
+	}
+	
+	@Inject
+	@Optional
+	public void receiverEvent(@UIEventTopic("rainbow/colour") String data) { // Must use UIEventTopic, not EventTopic due as it is UI thread
+		label.setText(data);
 	}
 	
 	@PostConstruct
