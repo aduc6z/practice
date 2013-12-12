@@ -26,7 +26,8 @@ public class Hello {
 	
 
 	@Inject
-	@Optional
+	@Optional // Optional as there may be no selection when a part is created. This method will at all.
+	// If argument is marked with @Optional, the method will be called with optional argument is null
 	public void setSelection(@Named(IServiceConstants.ACTIVE_SELECTION) Object selection) {
 		if (selection != null) {
 			label.setText(selection.toString());
