@@ -4,7 +4,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
@@ -13,6 +15,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.osgi.service.log.LogService;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class Hello {
 	
@@ -36,8 +39,11 @@ public class Hello {
 	
 	@Inject
 	@Optional
-	public void receiverEvent(@UIEventTopic("rainbow/colour") String data) { // Must use UIEventTopic, not EventTopic due as it is UI thread
+	public void receiverEvent(@UIEventTopic("rainbow/colour") String data) throws BackingStoreException { // Must use UIEventTopic, not EventTopic due as it is UI thread		
 		label.setText(data);
+		prefs.put("greeting", "I like " + data);
+		System.out.println("Store greeting preference: " + greeting);
+		prefs.sync();
 	}
 	
 	@Inject	@Named("math.random")
@@ -46,9 +52,17 @@ public class Hello {
 	@PostConstruct
 	public void create(Composite parent) {
 		label = new Label(parent, SWT.NONE);
-		label.setText(window.getLabel() + " " + random);
+		label.setText("--" + greeting + " " + window.getLabel() + " " + random);
 		if (log != null) {
 			log.log(LogService.LOG_ERROR, "Hello log");
+		}
+	}
+	
+	@Inject
+	@Optional
+	void setText(@Preference(nodePath="com.packtpub.e4.application", value="greeting") String text) {
+		if (text != null && label != null && !label.isDisposed()) {
+			label.setText(text);
 		}
 	}
 	
@@ -56,4 +70,12 @@ public class Hello {
 	public void focus() {
 		label.setFocus();
 	}
+
+	@Inject
+	@Preference(nodePath="com.packtpub.e4.application")
+	private IEclipsePreferences prefs;
+	
+	@Inject
+	@Preference(nodePath="com.packtpub.e4.application", value="greeting")
+	String greeting;
 }
