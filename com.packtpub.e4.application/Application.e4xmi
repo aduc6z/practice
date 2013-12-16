@@ -13,9 +13,11 @@
     </children>
     <mainMenu xmi:id="_hksvUF2oEeOkzIdXVsUuCg" elementId="menu:org.eclipse.ui.main.menu">
       <children xsi:type="menu:Menu" xmi:id="_hksvUV2oEeOkzIdXVsUuCg" label="File">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_hksvUl2oEeOkzIdXVsUuCg" label="Open" iconURI="platform:/plugin/com.packtpub.e4.application/icons/sample.gif" command="_hksIR12oEeOkzIdXVsUuCg"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_AJn1cGPkEeOx7PJSklpVQA" elementId="com.packtpub.e4.application.handledmenuitem.hello" label="Hello" mnemonics="Says Hello World" command="_GKOicGPjEeOx7PJSklpVQA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_hksvUl2oEeOkzIdXVsUuCg" label="Open" iconURI="platform:/plugin/com.packtpub.e4.application/icons/sample.gif" enabled="false" command="_hksIR12oEeOkzIdXVsUuCg"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_hksvU12oEeOkzIdXVsUuCg" label="Save" iconURI="platform:/plugin/com.packtpub.e4.application/icons/save_edit.gif" command="_hksISl2oEeOkzIdXVsUuCg"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_AJn1cGPkEeOx7PJSklpVQA" elementId="com.packtpub.e4.application.handledmenuitem.hello" label="Hello" iconURI="platform:/plugin/com.packtpub.e4.application/icons/sample.gif" mnemonics="Says Hello World" command="_GKOicGPjEeOx7PJSklpVQA">
+          <parameters xmi:id="_OO6wQGYVEeO3TpnZplQovw" elementId="com.packtpub.e4.application.parameter.hello.value" name="com.packtpub.e4.application.commandparameter.hello.value" value="Hello World Parameter"/>
+        </children>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_hksvVF2oEeOkzIdXVsUuCg" label="Quit" command="_hksIQ12oEeOkzIdXVsUuCg"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_hksvVV2oEeOkzIdXVsUuCg" label="Help">
@@ -33,7 +35,7 @@
   <handlers xmi:id="_hksISF2oEeOkzIdXVsUuCg" elementId="com.packtpub.e4.application.handler.openCommand" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.handlers.OpenHandler" command="_hksIR12oEeOkzIdXVsUuCg"/>
   <handlers xmi:id="_hksIS12oEeOkzIdXVsUuCg" elementId="com.packtpub.e4.application.handler.saveCommand" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.handlers.SaveHandler" command="_hksISl2oEeOkzIdXVsUuCg"/>
   <handlers xmi:id="_hksITl2oEeOkzIdXVsUuCg" elementId="com.packtpub.e4.application.handler.aboutCommand" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.handlers.AboutHandler" command="_hksITV2oEeOkzIdXVsUuCg"/>
-  <handlers xmi:id="_2qTbUGPjEeOx7PJSklpVQA" elementId="com.packtpub.e4.application.handler.hello" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.handlers.HelloHandler"/>
+  <handlers xmi:id="_2qTbUGPjEeOx7PJSklpVQA" elementId="com.packtpub.e4.application.handler.hello" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.handlers.HelloHandler" command="_GKOicGPjEeOx7PJSklpVQA"/>
   <bindingTables xmi:id="_hksIRV2oEeOkzIdXVsUuCg" bindingContext="_hksIQF2oEeOkzIdXVsUuCg">
     <bindings xmi:id="_hksIRl2oEeOkzIdXVsUuCg" keySequence="M1+Q" command="_hksIQ12oEeOkzIdXVsUuCg"/>
     <bindings xmi:id="_hksISV2oEeOkzIdXVsUuCg" keySequence="M1+O" command="_hksIR12oEeOkzIdXVsUuCg"/>
@@ -48,7 +50,9 @@
   <commands xmi:id="_hksIR12oEeOkzIdXVsUuCg" elementId="com.packtpub.e4.application.open" commandName="openCommand"/>
   <commands xmi:id="_hksISl2oEeOkzIdXVsUuCg" elementId="org.eclipse.ui.file.save" commandName="saveCommand"/>
   <commands xmi:id="_hksITV2oEeOkzIdXVsUuCg" elementId="org.eclipse.ui.help.aboutAction" commandName="aboutCommand"/>
-  <commands xmi:id="_GKOicGPjEeOx7PJSklpVQA" elementId="com.packtpub.e4.application.command.hello" commandName="helloCommand" description="Says Hello"/>
+  <commands xmi:id="_GKOicGPjEeOx7PJSklpVQA" elementId="com.packtpub.e4.application.command.hello" commandName="helloCommand" description="Says Hello">
+    <parameters xmi:id="_Rg7wEGYUEeO3TpnZplQovw" elementId="com.packtpub.e4.application.commandparameter.hello.value" name="hello.value"/>
+  </commands>
   <addons xmi:id="_hkrhMl2oEeOkzIdXVsUuCg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_hkrhM12oEeOkzIdXVsUuCg" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_hkrhNF2oEeOkzIdXVsUuCg" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
