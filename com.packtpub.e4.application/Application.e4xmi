@@ -19,6 +19,7 @@
           <parameters xmi:id="_OO6wQGYVEeO3TpnZplQovw" elementId="com.packtpub.e4.application.parameter.hello.value" name="com.packtpub.e4.application.commandparameter.hello.value" value="Hello World Parameter"/>
         </children>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_hksvVF2oEeOkzIdXVsUuCg" label="Quit" command="_hksIQ12oEeOkzIdXVsUuCg"/>
+        <children xsi:type="menu:DirectMenuItem" xmi:id="_9ARdgGYVEeO3TpnZplQovw" elementId="com.packtpub.e4.application.directmenuitem.hello" label="Direct Hello" contributionURI="bundleclass://com.packtpub.e4.application/com.packtpub.e4.application.handlers.HelloHandler"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_hksvVV2oEeOkzIdXVsUuCg" label="Help">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_hksvVl2oEeOkzIdXVsUuCg" label="About" command="_hksITV2oEeOkzIdXVsUuCg"/>
@@ -41,6 +42,7 @@
     <bindings xmi:id="_hksISV2oEeOkzIdXVsUuCg" keySequence="M1+O" command="_hksIR12oEeOkzIdXVsUuCg"/>
     <bindings xmi:id="_hksITF2oEeOkzIdXVsUuCg" keySequence="M1+S" command="_hksISl2oEeOkzIdXVsUuCg"/>
     <bindings xmi:id="_hksIT12oEeOkzIdXVsUuCg" keySequence="M1+A" command="_hksITV2oEeOkzIdXVsUuCg"/>
+    <bindings xmi:id="_QkXvQGYWEeO3TpnZplQovw" elementId="" keySequence="M1+L" command="_GKOicGPjEeOx7PJSklpVQA"/>
   </bindingTables>
   <rootContext xmi:id="_hksIQF2oEeOkzIdXVsUuCg" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
     <children xmi:id="_hksIQV2oEeOkzIdXVsUuCg" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
