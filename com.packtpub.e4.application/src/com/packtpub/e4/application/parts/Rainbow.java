@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.packtpub.e4.application.StringService;
+import com.packtpub.e4.application.IStringService;
 
 public class Rainbow {
 	private static final Object [] rainbow = {"Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet" };
@@ -25,7 +25,7 @@ public class Rainbow {
 	private ESelectionService selectionService; 
 
 	@Inject
-	private StringService stringService;
+	private IStringService stringService;
 	
 	@PostConstruct
 	public void create(Composite parent) {
