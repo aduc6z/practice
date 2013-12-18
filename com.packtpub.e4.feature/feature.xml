@@ -3,7 +3,8 @@
       id="com.packtpub.e4.feature"
       label="Feature"
       version="1.0.0.qualifier"
-      provider-name="PACKTPUB">
+      provider-name="PACKTPUB"
+      plugin="com.packtpub.e4.clock.ui">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
