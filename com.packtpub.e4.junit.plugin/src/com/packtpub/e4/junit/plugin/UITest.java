@@ -1,8 +1,10 @@
 package com.packtpub.e4.junit.plugin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -36,6 +38,17 @@ public class UITest {
 			System.out.println("Ignore exception");
 		}
 		
+	}
+	
+	@Test
+	public void testTimeZoneView() {
+		bot.menu("Window").menu("Show View").menu("Other...").click();
+		SWTBotShell shell = bot.shell("Show View");
+		shell.activate();
+		bot.tree().expandNode("Timekeeping").select("Time Zone View");
+		bot.button("OK").click();
+		SWTBotView timeZoneView = bot.viewByTitle("Time Zone View");
+		assertNotNull(timeZoneView);
 	}
 	
 	
