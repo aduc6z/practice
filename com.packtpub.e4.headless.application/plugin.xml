@@ -13,5 +13,17 @@
          </run>
       </application>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.packtpub.e4.headless.application.id1"
+            name="Headless product">
+         <property
+               name="appName"
+               value="Headless product">
+         </property>
+      </product>
+   </extension>
 
 </plugin>

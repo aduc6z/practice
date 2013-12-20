@@ -15,6 +15,18 @@
                name="applicationCSS"
                value="platform:/plugin/com.packtpub.e4.application/css/default.css">
          </property>
+         <property
+               name="appName"
+               value="com.packtpub.e4.application">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,252,445,20">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
       </product>
    </extension>
 
