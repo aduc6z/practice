@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.packtpub.e4</groupId>
-	<artifactId>com.packtpub.e4.clock.ui</artifactId>
+	<artifactId>com.packtpub.e4.feature</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-feature</packaging>
 	<parent>
 		<groupId>com.packtpub.e4</groupId>
 		<artifactId>com.packtpub.e4.parent</artifactId>
