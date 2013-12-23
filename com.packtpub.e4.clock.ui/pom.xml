@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.packtpub.e4</groupId>
+	<artifactId>com.packtpub.e4.clock.ui</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>0.18.0</version>
+				<extensions>true</extensions> <!--  Identify tycho as Maven plugin and an extension -->
+			</plugin>
+		</plugins>
+	</build>
+	<repositories>
+		<repository> <!--  must add Eclipse repository -->
+			<id>juno</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/juno</url>
+		</repository>
+		<!-- <repository> <id>juno</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/juno</url> 
+			</repository> -->
+	</repositories>
+</project>
