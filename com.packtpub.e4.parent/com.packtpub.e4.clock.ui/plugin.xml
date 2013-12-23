@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Timekeeping"
+            id="com.packtpub.e4.clock.ui">
+      </category>
+      <view
+            name="Clock View"
+            icon="icons/sample.gif"
+            category="com.packtpub.e4.clock.ui"
+            class="com.packtpub.e4.clock.ui.views.ClockView"
+            id="com.packtpub.e4.clock.ui.views.ClockView">
+      </view>
+      <view
+            category="com.packtpub.e4.clock.ui"
+            class="com.packtpub.e4.clock.ui.TimeZoneView"
+            icon="icons/sample.gif"
+            id="com.packtpub.e4.clock.ui.TimeZoneView"
+            name="Time Zone View"
+            restorable="true">
+      </view>
+      <view
+            category="com.packtpub.e4.clock.ui"
+            class="com.packtpub.e4.clock.ui.TimeZoneTreeView"
+            icon="icons/sample.gif"
+            id="com.packtpub.e4.clock.ui.TimeZoneTreeView"
+            name="Time Zone Tree View"
+            restorable="true">
+      </view>
+      <view
+            category="com.packtpub.e4.clock.ui"
+            class="com.packtpub.e4.clock.ui.TimeZoneTableView"
+            icon="icons/sample.gif"
+            id="com.packtpub.e4.clock.ui.TimeZoneTableView"
+            name="Time Zone Table View"
+            restorable="true">
+      </view>
+      
+   </extension>
+   
+   <extension point="org.eclipse.core.runtime.adapters">
+   	<factory adaptableType="java.util.TimeZone" class="com.packtpub.e4.clock.ui.internal.TimeZoneAdapterFactory">
+   	<adapter type="org.eclipse.ui.views.properties.IPropertySource" />
+   	</factory>
+   </extension>
+   
+   <extension point="org.eclipse.ui.commands">
+   	<command name="Hello plugin " description="Say hello world" id="com.packtpub.e4.clock.ui.command.hello"/>
+    <command description="Test from paeg" id="com.packtpub.e4.clock.ui.test" name="Test from page">
+    </command>
+   </extension>
+   
+   <extension point="org.eclipse.ui.handlers">
+      <handler class="com.packtpub.e4.clock.ui.handler.HelloHandlers" commandId="com.packtpub.e4.clock.ui.command.hello" >
+      	<!--enabledWhen>
+      		<reference definitionId="when.hello.is.active" />
+      	</enabledWhen-->
+      </handler>
+      <handler class="com.packtpub.e4.clock.ui.handler.HelloHandlers" commandId="com.packtpub.e4.clock.ui.test"  />
+      <handler class="com.packtpub.e4.clock.ui.handler.ShowTheTime" commandId="com.packtpub.e4.clock.ui.command.showTheTime"  />
+   </extension>
+
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution allPopups="false" locationURI="menu:help?after=additions">
+			<command commandId="com.packtpub.e4.clock.ui.command.hello" label="hello xml" style="push">
+			<!--visibleWhen>
+				<reference definitionId="when.hello.is.active"/>
+			</visibleWhen-->
+			</command>
+		</menuContribution>
+		<menuContribution allPopups="false" locationURI="popup:com.packtpub.e4.clock.ui.TimeZoneTableView?after=additions">
+			<command commandId="com.packtpub.e4.clock.ui.test" label="hello xml test" style="push" />
+		</menuContribution>
+		<menuContribution allPopups="false" locationURI="popup:org.eclipse.ui.popup.any">
+			<command commandId="com.packtpub.e4.clock.ui.command.showTheTime" label="Show the time" style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<iterate ifEmpty="false">
+							<adapt type="java.util.TimeZone"/>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution allPopups="false" locationURI="com.packtpub.e4.clock.ui.TimeZoneTreeView">
+			<command commandId="com.packtpub.e4.clock.ui.command.showTheTime" label="Clock menu" style="push">
+			</command>
+		</menuContribution>
+	</extension>
+ <extension
+       point="org.eclipse.ui.bindings">
+    <key
+          commandId="com.packtpub.e4.clock.ui.command.hello"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+9">
+    </key>
+ </extension>
+ 
+ <extension point="org.eclipse.core.expressions.definitions">
+ 	<definition id="when.hello.is.active">
+ 		<with variable="activeContexts">
+			<iterate operator="or">
+			<equals value="org.eclipse.jdt.ui.javaEditorScope"/>
+			</iterate>
+ 		</with>
+ 	</definition>
+ </extension>   
+ 	<extension point="org.eclipse.ui.commands">
+ 		<command name="Show the time" description="Shows the time" id="com.packtpub.e4.clock.ui.command.showTheTime"/>
+ 	</extension>
+ 	
+ 	<extension point="org.eclipse.ui.preferencePages">
+ 		<page name="Clock" class="com.packtpub.e4.clock.ui.views.ClockPreferencePage" id="com.packtpub.e4.clock.ui.preference.page"/>
+ 	</extension> 
+
+</plugin>
