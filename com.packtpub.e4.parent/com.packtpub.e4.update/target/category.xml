@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.packtpub.e4.feature_1.0.0.201312171259.jar" id="com.packtpub.e4.feature" version="1.0.0.201312171259">
+   <feature url="features/com.packtpub.e4.feature_1.0.0.201312171259.jar" id="com.packtpub.e4.feature" version="0.0.0">
+   <!-- set dependency version to 0.0.0 to avoid cannot satisfy dependency -->
       <category name="com.packtpub.e4.category"/>
    </feature>
    <category-def name="com.packtpub.e4.category" label="E4 Category">

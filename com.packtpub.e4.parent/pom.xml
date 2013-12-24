@@ -9,11 +9,12 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.18.0</tycho-version>
-		<eclipse>http://download.eclipse.org/releases/juno</eclipse>
+		<eclipse>http://download.eclipse.org/releases/kepler</eclipse>
 	</properties>
 	<modules>
 		<module>com.packtpub.e4.clock.ui</module>
 		<module>com.packtpub.e4.feature</module>
+		<module>com.packtpub.e4.update</module>
 	</modules>
 	<build>
 		<plugins>

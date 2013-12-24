@@ -3,7 +3,7 @@ Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui
  .views;bundle-version="3.6.100"
 Bundle-Vendor: PACKTPUB
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.0.0.201312230539
+Bundle-Version: 1.0.0.201312240537
 Bundle-Name: Clock
 Bundle-Activator: com.packtpub.e4.clock.ui.Activator
 Bundle-ManifestVersion: 2
