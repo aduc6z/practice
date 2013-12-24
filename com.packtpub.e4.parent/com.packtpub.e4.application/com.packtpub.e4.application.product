@@ -16,7 +16,7 @@
    <splash
       startupProgressRect="5,275,445,15"
       startupMessageRect="7,252,445,20" />
-   <plugins>
+   <!--plugins>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.packtpub.e4.application"/>
       <plugin id="javax.annotation"/>
@@ -78,7 +78,11 @@
       <plugin id="org.w3c.css.sac"/>
       <plugin id="org.w3c.dom.smil"/>
       <plugin id="org.w3c.dom.svg"/>
-   </plugins>
+   </plugins-->
+   <features>
+   	<feature id="com.packtpub.e4.feature" version="0.0.0" />
+   	<feature id="org.eclipse.rcp" version="0.0.0" />
+   </features>
 
 
 </product>
