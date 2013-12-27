@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -10,12 +10,14 @@
 	<properties>
 		<tycho-version>0.18.0</tycho-version>
 		<eclipse>http://download.eclipse.org/releases/kepler</eclipse>
+		<swtbot>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot>
 	</properties>
 	<modules>
 		<module>com.packtpub.e4.clock.ui</module>
 		<module>com.packtpub.e4.feature</module>
 		<module>com.packtpub.e4.update</module>
 		<module>com.packtpub.e4.application</module>
+		<module>com.packtpub.e4.junit.plugin</module>
 	</modules>
 	<build>
 		<plugins>
@@ -23,15 +25,48 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
-				<extensions>true</extensions> <!--  Identify tycho as Maven plugin and an extension -->
+				<extensions>true</extensions> <!-- Identify tycho as Maven plugin and an extension -->
 			</plugin>
 		</plugins>
 	</build>
 	<repositories>
-		<repository> <!--  must add Eclipse repository -->
+		<repository> <!-- must add Eclipse repository -->
 			<id>juno</id>
 			<layout>p2</layout>
 			<url>${eclipse}</url>
 		</repository>
+		<repository>
+			<id>swtbot</id>
+			<layout>p2</layout>
+			<url>${swtbot}</url>
+		</repository>
 	</repositories>
+	<profiles>
+		<profile>
+			<id>sign</id>
+			<activation>
+				<property>
+					<name>jarsigner.alias</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+
+			</build>
+		</profile>
+	</profiles>
 </project>
