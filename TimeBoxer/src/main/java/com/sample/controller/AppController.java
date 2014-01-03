@@ -44,7 +44,7 @@ public class AppController {
     }
 
     void updateTime(long elapsedTime) {
-        popup.update(elapsedTime);
+        popup.update(elapsedTime, currentState % 2 == 0 ? "R" : "W");
     }
 
     public Boolean isRunning() {

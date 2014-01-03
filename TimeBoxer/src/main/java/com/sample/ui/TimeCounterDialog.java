@@ -180,7 +180,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
    
-    String getTime(long timeInMilliSecond) {
+    String getTimeInString(long timeInMilliSecond) {
         long timeInSeconds = timeInMilliSecond / 1000;
         long timeInMinutes = timeInSeconds / 60;
         String seconds = String.valueOf(timeInSeconds % 60);
@@ -188,11 +188,9 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         return String.valueOf(timeInMinutes) + ":" + String.valueOf(seconds);
     }
     
-    public void update(long elapsedTime) {
-        elapsedTimeLabel.setText(getTime(elapsedTime));
-        if (popupMenu != null) {
-           popupMenu.setLabel(getTime(elapsedTime));
-        }        
+    public void update(long elapsedTime, String status) {
+        elapsedTimeLabel.setText(getTimeInString(elapsedTime));
+        placeHolder.setLabel(status + " --- " + getTimeInString(elapsedTime));
     }
     
     AppController controller;
@@ -207,13 +205,14 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     }
     
     PopupMenu popupMenu;
+    MenuItem placeHolder = new MenuItem();
     
     void createSystemTray() {
         if (!SystemTray.isSupported()) {
             System.err.println("System does not support tray!");
             return;
         }
-        popupMenu = new PopupMenu("--- Popup ---");
+        popupMenu = new PopupMenu();
         final TrayIcon trayIcon = new TrayIcon(createImage("/resources/index.jpeg", "tray icon"));
         trayIcon.setImageAutoSize(true);
         final SystemTray tray = SystemTray.getSystemTray();
@@ -243,6 +242,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
+        popupMenu.add(placeHolder);
         popupMenu.add(nextItem);
         popupMenu.add(pauseResumeItem);
         popupMenu.add(configItem);
@@ -271,7 +271,6 @@ public class TimeCounterDialog extends javax.swing.JFrame {
                 Logger.getLogger(TimeCounterDialog.class.getName()).log(Level.SEVERE, null, ex);
             }
             return image;
-//            return (new ImageIcon(imageURL, description)).getImage();
         }
     }
 }
