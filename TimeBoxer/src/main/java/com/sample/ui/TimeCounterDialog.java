@@ -192,6 +192,9 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     public void update(long elapsedTime, String status) {
         elapsedTimeLabel.setText(getTimeInString(elapsedTime));
         placeHolder.setLabel(status + " --- " + getTimeInString(elapsedTime));
+        if (trayIcon != null) {
+            trayIcon.setToolTip(status + " --- " + getTimeInString(elapsedTime));
+        }
     }
     
     AppController controller;
@@ -207,6 +210,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     
     PopupMenu popupMenu;
     MenuItem placeHolder = new MenuItem();
+    TrayIcon trayIcon;
     
     void createSystemTray() {
         if (!SystemTray.isSupported()) {
@@ -214,7 +218,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             return;
         }
         popupMenu = new PopupMenu();
-        final TrayIcon trayIcon = new TrayIcon(createImage("/resources/index.jpeg", "tray icon"));
+        trayIcon = new TrayIcon(createImage("/resources/index.jpeg", "tray icon"));
         trayIcon.setImageAutoSize(true);
         final SystemTray tray = SystemTray.getSystemTray();
         
@@ -249,6 +253,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         popupMenu.add(configItem);
         popupMenu.add(exitItem);
         trayIcon.setPopupMenu(popupMenu);
+
         try {
             tray.add(trayIcon);
         } catch (AWTException ex) {
