@@ -19,8 +19,8 @@ public class AppTimer extends java.util.Timer {
     final int state;
     AppController controller;
     final long sleepStep = 1000; // in milliseconds
-    final int WORK_TIME = 25;
-    final int REST_TIME = 5;
+    final int WORK_TIME = 1;
+    final int REST_TIME = 2;
     final boolean measureInMinutes = true;
     
     public AppTimer(AppController controller, int state) {
@@ -31,7 +31,7 @@ public class AppTimer extends java.util.Timer {
     class TimeCounter extends TimerTask {
         
         long totalTime, sleepStep;
-        long elapsedTime;
+        long elapsedTime = 0;
         
         public TimeCounter(long totalTime, long sleepStep) {
             this.totalTime = totalTime;
@@ -40,13 +40,12 @@ public class AppTimer extends java.util.Timer {
         
         @Override
         public void run() {
-//            System.out.println("Current elapsed time: " + elapsedTime);
             controller.updateTime(elapsedTime);
             if (controller.isRunning()) {
                 elapsedTime += sleepStep;
             }
-            if (elapsedTime > totalTime) {
-                controller.stop();
+            if (elapsedTime > totalTime) { 
+               controller.stop();
             }
         }        
     }

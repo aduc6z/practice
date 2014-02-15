@@ -123,7 +123,6 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_pauseResumeButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        this.controller.stop();
 		this.controller.start();      
         nextButton.setEnabled(false);
         pauseResumeButton.setEnabled(true);
@@ -183,10 +182,10 @@ public class TimeCounterDialog extends javax.swing.JFrame {
 
    
     String getTimeInString(long timeInMilliSecond) {
-        long timeInSeconds = timeInMilliSecond / 1000;
-        long timeInMinutes = timeInSeconds / 60;
+        long timeInSeconds = timeInMilliSecond / 1000;        
         String seconds = String.valueOf(timeInSeconds % 60);
-        seconds = (seconds.length() >=2 ? "" : "0") + seconds;
+		seconds = (seconds.length() >=2 ? "" : "0") + seconds;
+		long timeInMinutes = timeInSeconds / 60;
         return String.valueOf(timeInMinutes) + ":" + String.valueOf(seconds);
     }
     
