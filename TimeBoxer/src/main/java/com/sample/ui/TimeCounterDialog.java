@@ -123,7 +123,8 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_pauseResumeButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-		this.controller.start();      
+	this.controller.stop();        
+        this.controller.start();      
         nextButton.setEnabled(false);
         pauseResumeButton.setEnabled(true);
         this.setVisible(false);
