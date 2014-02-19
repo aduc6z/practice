@@ -8,10 +8,6 @@ package com.sample.controller;
 
 import java.util.TimerTask;
 
-/**
- *
- * 
- */
 public class AppTimer extends java.util.Timer {  
     
     final int REST = 0;
@@ -44,7 +40,7 @@ public class AppTimer extends java.util.Timer {
             if (controller.isRunning()) {
                 elapsedTime += sleepStep;
             }
-            if (elapsedTime > totalTime) { 
+            if (elapsedTime > totalTime) {            
                controller.stop();
             }
         }        

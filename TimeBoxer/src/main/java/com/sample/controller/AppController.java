@@ -14,29 +14,36 @@ import com.sample.ui.TimeCounterDialog;
  */
 public class AppController {
     AppTimer controlTimer;
-    int currentState = 1;
-    Boolean running = true;
+    int currentState;
+    Boolean running;
     TimeCounterDialog popup;
     
     public AppController(TimeCounterDialog popupDialog) {
+        currentState = 1;
+        running = true;
         this.popup = popupDialog;
         controlTimer = new AppTimer(this, currentState);
         controlTimer.start();
         System.out.println("Finished initialized controller");
-    }
-    
+    }    
       
     public void stop() {
-        controlTimer.cancel();
-        currentState++;
+        swithState();
         popup.setVisible(true);
         popup.enableNext();
+        running = false;
     }
     
+    void swithState() {
+        currentState++;
+        controlTimer.cancel();
+    }
+           
     public void start() {
+        if (running) swithState();
         controlTimer = new AppTimer(this, currentState);
-        controlTimer.start();
-        popup.setVisible(true);
+        controlTimer.start(); 
+        running = true;
     }
     
     public void toggleRunningState() {
@@ -49,6 +56,6 @@ public class AppController {
 
     public Boolean isRunning() {
         return running;
-    }    
-    
+    }
+   
 }
