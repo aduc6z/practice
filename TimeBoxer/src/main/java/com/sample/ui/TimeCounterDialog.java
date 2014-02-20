@@ -16,6 +16,9 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +53,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         nextButton = new javax.swing.JButton();
         hideButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Time");
@@ -226,8 +229,25 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         MenuItem nextItem = new MenuItem("Next");       
         MenuItem pauseResumeItem = new MenuItem("Pause/Resume");
         MenuItem exitItem = new MenuItem("Exit");
-        nextItem.addActionListener(new ActionListener() {
+        registerMenuListener(nextItem, pauseResumeItem, exitItem);
+        registerMouseEvenForSystemTray(trayIcon);
+        popupMenu.add(placeHolder);
+        popupMenu.add(nextItem);
+        popupMenu.add(pauseResumeItem);
+        popupMenu.add(configItem);
+        popupMenu.add(exitItem);
+        trayIcon.setPopupMenu(popupMenu);
 
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException ex) {
+            Logger.getLogger(TimeCounterDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void registerMenuListener(MenuItem nextItem, MenuItem pauseResumeItem, MenuItem exitItem) {
+        nextItem.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 nextButtonActionPerformed(e);
@@ -247,18 +267,6 @@ public class TimeCounterDialog extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
-        popupMenu.add(placeHolder);
-        popupMenu.add(nextItem);
-        popupMenu.add(pauseResumeItem);
-        popupMenu.add(configItem);
-        popupMenu.add(exitItem);
-        trayIcon.setPopupMenu(popupMenu);
-
-        try {
-            tray.add(trayIcon);
-        } catch (AWTException ex) {
-            Logger.getLogger(TimeCounterDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
      protected static Image createImage(String path, String description) {
@@ -279,4 +287,16 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             return image;
         }
     }
+         
+    void registerMouseEvenForSystemTray(TrayIcon trayIcon) {
+         trayIcon.addMouseListener(new MouseAdapter() {
+
+             @Override
+             public void mouseClicked(MouseEvent e) {
+                 if (e.getClickCount() > 1) {
+                     setVisible(true);
+                 }
+             }             
+         });         
+     }
 }
