@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +50,6 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         elapsedTimeLabel = new javax.swing.JLabel();
         pauseResumeButton = new javax.swing.JToggleButton();
         nextButton = new javax.swing.JButton();
-        hideButton = new javax.swing.JButton();
 
         setResizable(false);
 
@@ -75,46 +73,33 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             }
         });
 
-        hideButton.setText("Hide");
-        hideButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hideButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(74, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pauseResumeButton)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(elapsedTimeLabel)
                     .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(187, 187, 187)
-                .addComponent(hideButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(84, 84, 84)
+                .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(elapsedTimeLabel))
-                .addGap(75, 75, 75)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pauseResumeButton)
                     .addComponent(nextButton))
-                .addGap(18, 18, 18)
-                .addComponent(hideButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
@@ -131,10 +116,6 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         pauseResumeButton.setEnabled(true);
         this.setVisible(false);
     }//GEN-LAST:event_nextButtonActionPerformed
-
-    private void hideButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideButtonActionPerformed
-        this.setVisible(false);
-    }//GEN-LAST:event_hideButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,7 +158,6 @@ public class TimeCounterDialog extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel elapsedTimeLabel;
-    private javax.swing.JButton hideButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton nextButton;
     private javax.swing.JToggleButton pauseResumeButton;
