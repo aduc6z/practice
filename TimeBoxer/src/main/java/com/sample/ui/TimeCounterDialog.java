@@ -108,11 +108,13 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     private void pauseResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseResumeButtonActionPerformed
         controller.toggleRunningState();
         nextButton.setEnabled(false);
+        nextItem.setEnabled(controller.isRunning());
     }//GEN-LAST:event_pauseResumeButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         this.controller.start();
         nextButton.setEnabled(false);
+        nextItem.setEnabled(true);
         pauseResumeButton.setEnabled(true);
         this.setVisible(false);
     }//GEN-LAST:event_nextButtonActionPerformed
@@ -194,6 +196,10 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     PopupMenu popupMenu;
     MenuItem placeHolder = new MenuItem();
     TrayIcon trayIcon;
+    MenuItem configItem = new MenuItem("Configure");
+    MenuItem nextItem = new MenuItem("Next");       
+    MenuItem pauseResumeItem = new MenuItem("Pause/Resume");
+    MenuItem exitItem = new MenuItem("Exit");
     
     void createSystemTray() {
         if (!SystemTray.isSupported()) {
@@ -205,10 +211,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         trayIcon.setImageAutoSize(true);
         final SystemTray tray = SystemTray.getSystemTray();
         
-        MenuItem configItem = new MenuItem("Configure");
-        MenuItem nextItem = new MenuItem("Next");       
-        MenuItem pauseResumeItem = new MenuItem("Pause/Resume");
-        MenuItem exitItem = new MenuItem("Exit");
+        
         registerMenuListener(nextItem, pauseResumeItem, exitItem);
         registerMouseEvenForSystemTray(trayIcon);
         popupMenu.add(placeHolder);

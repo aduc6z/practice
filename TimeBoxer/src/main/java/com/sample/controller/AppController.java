@@ -26,7 +26,7 @@ public class AppController {
         controlTimer.start();
         System.out.println("Finished initialized controller");
     }    
-      
+    
     public void stop() {
         swithState();
         popup.setVisible(true);
