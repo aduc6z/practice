@@ -4,7 +4,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.sample.ui;
 
 import com.sample.controller.AppController;
@@ -51,6 +50,8 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         pauseResumeButton = new javax.swing.JToggleButton();
         nextButton = new javax.swing.JButton();
 
+        setTitle("W");
+        setAlwaysOnTop(true);
         setResizable(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -165,15 +166,14 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     private javax.swing.JToggleButton pauseResumeButton;
     // End of variables declaration//GEN-END:variables
 
-   
     String getTimeInString(long timeInMilliSecond) {
-        long timeInSeconds = timeInMilliSecond / 1000;        
+        long timeInSeconds = timeInMilliSecond / 1000;
         String seconds = String.valueOf(timeInSeconds % 60);
-		seconds = (seconds.length() >=2 ? "" : "0") + seconds;
-		long timeInMinutes = timeInSeconds / 60;
+        seconds = (seconds.length() >= 2 ? "" : "0") + seconds;
+        long timeInMinutes = timeInSeconds / 60;
         return String.valueOf(timeInMinutes) + ":" + String.valueOf(seconds);
     }
-    
+
     public void update(long elapsedTime, String status) {
         elapsedTimeLabel.setText(getTimeInString(elapsedTime));
         placeHolder.setLabel(status + " --- " + getTimeInString(elapsedTime));
@@ -181,7 +181,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             trayIcon.setToolTip(status + " --- " + getTimeInString(elapsedTime));
         }
     }
-    
+
     AppController controller;
 
     public void setController(AppController controller) {
@@ -190,17 +190,17 @@ public class TimeCounterDialog extends javax.swing.JFrame {
 
     public void enableNext() {
         nextButton.setEnabled(true);
-        pauseResumeButton.setEnabled(false);        
+        pauseResumeButton.setEnabled(false);
     }
-    
+
     PopupMenu popupMenu;
     MenuItem placeHolder = new MenuItem();
     TrayIcon trayIcon;
     MenuItem configItem = new MenuItem("Configure");
-    MenuItem nextItem = new MenuItem("Next");       
+    MenuItem nextItem = new MenuItem("Next");
     MenuItem pauseResumeItem = new MenuItem("Pause/Resume");
     MenuItem exitItem = new MenuItem("Exit");
-    
+
     void createSystemTray() {
         if (!SystemTray.isSupported()) {
             System.err.println("System does not support tray!");
@@ -210,8 +210,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         trayIcon = new TrayIcon(createImage("/resources/index.jpeg", "tray icon"));
         trayIcon.setImageAutoSize(true);
         final SystemTray tray = SystemTray.getSystemTray();
-        
-        
+
         registerMenuListener(nextItem, pauseResumeItem, exitItem);
         registerMouseEvenForSystemTray(trayIcon);
         popupMenu.add(placeHolder);
@@ -230,7 +229,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
 
     private void registerMenuListener(MenuItem nextItem, MenuItem pauseResumeItem, MenuItem exitItem) {
         nextItem.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 nextButtonActionPerformed(e);
@@ -251,10 +250,10 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             }
         });
     }
-    
-     protected static Image createImage(String path, String description) {
+
+    protected static Image createImage(String path, String description) {
         URL imageURL = TimeCounterDialog.class.getResource(path);
-         
+
         if (imageURL == null) {
             System.err.println("Resource not found: " + path);
             return null;
@@ -270,16 +269,32 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             return image;
         }
     }
-         
-    void registerMouseEvenForSystemTray(TrayIcon trayIcon) {
-         trayIcon.addMouseListener(new MouseAdapter() {
 
-             @Override
-             public void mouseClicked(MouseEvent e) {
-                 if (e.getClickCount() > 1) {
-                     setVisible(true);
-                 }
-             }             
-         });         
-     }
+    /**
+     * Handle double click
+     *
+     * @param trayIcon
+     */
+    void registerMouseEvenForSystemTray(TrayIcon trayIcon) {
+        trayIcon.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() > 1) {
+                    showDialog();
+                }
+            }
+        });
+    }
+
+    /**
+     * Customized method to ensure the dialog is brought to front
+     * even when there is focus stealing
+     * */
+    public void showDialog() {
+        setVisible(true);
+        toFront();
+        requestFocus();
+        repaint();
+    }
 }

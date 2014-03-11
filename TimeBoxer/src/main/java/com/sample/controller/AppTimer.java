@@ -26,11 +26,11 @@ public class AppTimer extends java.util.Timer {
         
     class TimeCounter extends TimerTask {
         
-        long totalTime, sleepStep;
+        long sleepStep;
         long elapsedTime = 0;
         
         public TimeCounter(long totalTime, long sleepStep) {
-            this.totalTime = totalTime;
+            this.elapsedTime = totalTime;
             this.sleepStep = sleepStep;          
         }
         
@@ -38,10 +38,11 @@ public class AppTimer extends java.util.Timer {
         public void run() {
             controller.updateTime(elapsedTime);
             if (controller.isRunning()) {
-                elapsedTime += sleepStep;
+                elapsedTime -= sleepStep;
             }
-            if (elapsedTime > totalTime) {            
+            if (elapsedTime <= 0) {            
                controller.stop();
+               elapsedTime = 0;
             }
         }        
     }

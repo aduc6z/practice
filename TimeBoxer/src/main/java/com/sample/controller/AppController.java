@@ -28,14 +28,15 @@ public class AppController {
     }    
     
     public void stop() {
-        swithState();
-        popup.setVisible(true);
-        popup.enableNext();
+        swithState();        
+        popup.showDialog();
+        popup.enableNext();        
         running = false;
     }
     
     void swithState() {
         currentState++;
+        popup.setTitle(currentState % 2 == 0 ? "R" : "W");
         controlTimer.cancel();
     }
            
