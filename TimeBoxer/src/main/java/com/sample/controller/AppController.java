@@ -35,7 +35,7 @@ public class AppController {
     }
     
     void swithState() {
-        currentState++;
+        currentState = currentState % 2 == 0 ? 1 : 0;
         popup.setTitle(currentState % 2 == 0 ? "R" : "W");
         controlTimer.cancel();
     }
@@ -57,6 +57,10 @@ public class AppController {
 
     public Boolean isRunning() {
         return running;
+    }
+
+    public int getState() {
+        return currentState;
     }
    
 }

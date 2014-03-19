@@ -10,8 +10,8 @@ import java.util.TimerTask;
 
 public class AppTimer extends java.util.Timer {  
     
-    final int REST = 0;
-    final int WORK = 1;
+    public final static int REST = 0;
+    public final static int WORK = 1;
     final int state;
     AppController controller;
     final long sleepStep = 1000; // in milliseconds

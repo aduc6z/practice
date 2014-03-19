@@ -7,6 +7,7 @@
 package com.sample.ui;
 
 import com.sample.controller.AppController;
+import com.sample.controller.AppTimer;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -114,6 +115,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         this.controller.start();
+        trayIcon.setImage(createImage(getResourcePath(this.controller.getState()), "Image description"));
         nextButton.setEnabled(false);
         nextItem.setEnabled(true);
         pauseResumeButton.setEnabled(true);
@@ -154,7 +156,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
                 dialog.setVisible(true);
                 AppController controller = new AppController(dialog);
                 dialog.setController(controller);
-                dialog.createSystemTray();
+                dialog.createSystemTray(AppTimer.WORK);
             }
         });
     }
@@ -201,30 +203,50 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     MenuItem pauseResumeItem = new MenuItem("Pause/Resume");
     MenuItem exitItem = new MenuItem("Exit");
 
-    void createSystemTray() {
+    void createSystemTray(int state) {
         if (!SystemTray.isSupported()) {
             System.err.println("System does not support tray!");
             return;
         }
-        popupMenu = new PopupMenu();
-        trayIcon = new TrayIcon(createImage("/resources/index.jpeg", "tray icon"));
-        trayIcon.setImageAutoSize(true);
-        final SystemTray tray = SystemTray.getSystemTray();
-
+        final SystemTray tray = SystemTray.getSystemTray();        
+        if (trayIcon != null) {
+            tray.remove(trayIcon);
+        }
+        trayIcon = createTrayIcon(getResourcePath(state), "tray icon");
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException ex) {
+            Logger.getLogger(TimeCounterDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    String getResourcePath(int state) {
+        String resourcePath = null;
+        switch(state) {
+            case AppTimer.REST:
+                resourcePath = "/resources/standby.jpeg";
+                break;
+            default:
+                resourcePath = "/resources/index.jpeg";
+                break;
+        }
+        return resourcePath;
+    }
+    
+    TrayIcon createTrayIcon(String resourcePath, String trayName) {
+        System.out.println("Create icon from " + resourcePath);
+        trayIcon = new TrayIcon(createImage(resourcePath, trayName));
+        trayIcon.setImageAutoSize(true);    
         registerMenuListener(nextItem, pauseResumeItem, exitItem);
         registerMouseEvenForSystemTray(trayIcon);
+        popupMenu = new PopupMenu();
         popupMenu.add(placeHolder);
         popupMenu.add(nextItem);
         popupMenu.add(pauseResumeItem);
         popupMenu.add(configItem);
         popupMenu.add(exitItem);
         trayIcon.setPopupMenu(popupMenu);
-
-        try {
-            tray.add(trayIcon);
-        } catch (AWTException ex) {
-            Logger.getLogger(TimeCounterDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        return trayIcon;
     }
 
     private void registerMenuListener(MenuItem nextItem, MenuItem pauseResumeItem, MenuItem exitItem) {
@@ -233,6 +255,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 nextButtonActionPerformed(e);
+                System.out.println("Call next button");
             }
         });
         pauseResumeItem.addActionListener(new ActionListener() {
