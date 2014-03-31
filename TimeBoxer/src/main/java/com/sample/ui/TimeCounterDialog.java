@@ -110,7 +110,9 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     private void pauseResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseResumeButtonActionPerformed
         controller.toggleRunningState();
         nextButton.setEnabled(false);
+        pauseResumeButton.setSelected(!controller.isRunning());
         nextItem.setEnabled(controller.isRunning());
+        restartItem.setEnabled(controller.isRunning());
     }//GEN-LAST:event_pauseResumeButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
@@ -118,7 +120,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         trayIcon.setImage(createImage(getResourcePath(this.controller.getState()), "Image description"));
         nextButton.setEnabled(false);
         nextItem.setEnabled(true);
-        pauseResumeButton.setEnabled(true);
+        pauseResumeButton.setEnabled(true);        
         this.setVisible(false);
     }//GEN-LAST:event_nextButtonActionPerformed
 
@@ -201,6 +203,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     MenuItem configItem = new MenuItem("Configure");
     MenuItem nextItem = new MenuItem("Next");
     MenuItem pauseResumeItem = new MenuItem("Pause/Resume");
+    MenuItem restartItem = new MenuItem("Restart");
     MenuItem exitItem = new MenuItem("Exit");
 
     void createSystemTray(int state) {
@@ -243,8 +246,9 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         popupMenu.add(placeHolder);
         popupMenu.add(nextItem);
         popupMenu.add(pauseResumeItem);
+        popupMenu.add(restartItem);
         popupMenu.add(configItem);
-        popupMenu.add(exitItem);
+        popupMenu.add(exitItem);        
         trayIcon.setPopupMenu(popupMenu);
         return trayIcon;
     }
@@ -272,6 +276,18 @@ public class TimeCounterDialog extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
+        restartItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                restartButtonActionPerformed(e);
+            }
+
+        });
+    }
+    
+    private void restartButtonActionPerformed(ActionEvent e) {
+        nextButtonActionPerformed(e);
+        nextButtonActionPerformed(e);
     }
 
     protected static Image createImage(String path, String description) {

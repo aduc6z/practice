@@ -42,6 +42,7 @@ public class AppController {
            
     public void start() {
         if (running) swithState();
+        controlTimer.cancel();
         controlTimer = new AppTimer(this, currentState);
         controlTimer.start(); 
         running = true;

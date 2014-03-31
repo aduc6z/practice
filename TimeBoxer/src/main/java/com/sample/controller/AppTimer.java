@@ -36,7 +36,6 @@ public class AppTimer extends java.util.Timer {
         
         @Override
         public void run() {
-            controller.updateTime(elapsedTime);
             if (controller.isRunning()) {
                 elapsedTime -= sleepStep;
             }
@@ -44,6 +43,7 @@ public class AppTimer extends java.util.Timer {
                controller.stop();
                elapsedTime = 0;
             }
+            controller.updateTime(elapsedTime);
         }        
     }
         
@@ -64,7 +64,7 @@ public class AppTimer extends java.util.Timer {
     
     public void start() {
         TimerTask task = getTask(state);
-        this.schedule(task, 0, sleepStep);
+        this.schedule(task, sleepStep, sleepStep);
     }
     
 }
