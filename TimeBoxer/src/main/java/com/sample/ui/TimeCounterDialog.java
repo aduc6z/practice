@@ -110,14 +110,17 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     private void pauseResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseResumeButtonActionPerformed
         controller.toggleRunningState();
         nextButton.setEnabled(false);
-        pauseResumeButton.setSelected(!controller.isRunning());
+        updateSystemTrayImage();
+//        System.out.println("Event: " + evt.getActionCommand());
+        pauseResumeButton.setSelected(!controller.isRunning());       
         nextItem.setEnabled(controller.isRunning());
         restartItem.setEnabled(controller.isRunning());
     }//GEN-LAST:event_pauseResumeButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         this.controller.start();
-        trayIcon.setImage(createImage(getResourcePath(this.controller.getState()), "Image description"));
+//        trayIcon.setImage(createImage(getResourcePath(this.controller.getState()), "Image description"));
+        updateSystemTrayImage();
         nextButton.setEnabled(false);
         nextItem.setEnabled(true);
         pauseResumeButton.setEnabled(true);        
@@ -170,7 +173,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     private javax.swing.JToggleButton pauseResumeButton;
     // End of variables declaration//GEN-END:variables
 
-    String getTimeInString(long timeInMilliSecond) {
+    private String getTimeInString(long timeInMilliSecond) {
         long timeInSeconds = timeInMilliSecond / 1000;
         String seconds = String.valueOf(timeInSeconds % 60);
         seconds = (seconds.length() >= 2 ? "" : "0") + seconds;
@@ -178,7 +181,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         return String.valueOf(timeInMinutes) + ":" + String.valueOf(seconds);
     }
 
-    public void update(long elapsedTime, String status) {
+    public void updateView(long elapsedTime, String status) {
         elapsedTimeLabel.setText(getTimeInString(elapsedTime));
         placeHolder.setLabel(status + " --- " + getTimeInString(elapsedTime));
         if (trayIcon != null) {
@@ -206,7 +209,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     MenuItem restartItem = new MenuItem("Restart");
     MenuItem exitItem = new MenuItem("Exit");
 
-    void createSystemTray(int state) {
+    private void createSystemTray(int state) {
         if (!SystemTray.isSupported()) {
             System.err.println("System does not support tray!");
             return;
@@ -223,15 +226,29 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         }
     }
     
-    String getResourcePath(int state) {
+    public void updateSystemTrayImage() {
+        if (!SystemTray.isSupported()) {
+            System.err.println("System does not support tray!");
+            return;
+        }
+        Image image = createImage(getResourcePath(controller.isRunning() ? controller.getState() : AppTimer.PAUSE), "");
+        trayIcon.setImage(image);
+    }
+    
+    private String getResourcePath(int state) {
         String resourcePath = null;
         switch(state) {
             case AppTimer.REST:
                 resourcePath = "/resources/standby.jpeg";
                 break;
-            default:
+            case AppTimer.WORK:
                 resourcePath = "/resources/index.jpeg";
                 break;
+            case AppTimer.PAUSE:
+                resourcePath = "/resources/stop.png";
+                break;
+            default:
+                throw new RuntimeException("Unsupported state!");
         }
         return resourcePath;
     }
@@ -308,7 +325,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             return image;
         }
     }
-
+    
     /**
      * Handle double click
      *

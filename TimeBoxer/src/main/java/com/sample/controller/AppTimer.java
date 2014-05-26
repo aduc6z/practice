@@ -12,11 +12,12 @@ public class AppTimer extends java.util.Timer {
     
     public final static int REST = 0;
     public final static int WORK = 1;
+    public final static int PAUSE = 2;
     final int state;
     AppController controller;
     final long sleepStep = 1000; // in milliseconds
-    final int WORK_TIME = 25;
-    final int REST_TIME = 5;
+    final int WORK_TIME = 1;
+    final int REST_TIME = 1;
     final boolean measureInMinutes = true;
     
     public AppTimer(AppController controller, int state) {

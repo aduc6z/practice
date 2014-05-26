@@ -28,32 +28,35 @@ public class AppController {
     }    
     
     public void stop() {
-        swithState();        
-        popup.showDialog();
-        popup.enableNext();        
+        switchState();
+        popup.showDialog();       
+        popup.enableNext();
         running = false;
+        popup.updateSystemTrayImage();
     }
     
-    void swithState() {
+    private void switchState() {
         currentState = currentState % 2 == 0 ? 1 : 0;
         popup.setTitle(currentState % 2 == 0 ? "R" : "W");
         controlTimer.cancel();
     }
            
     public void start() {
-        if (running) swithState();
+        if (running) switchState();
         controlTimer.cancel();
         controlTimer = new AppTimer(this, currentState);
         controlTimer.start(); 
         running = true;
+        popup.updateSystemTrayImage();
     }
     
     public void toggleRunningState() {
         running = !running;
+        popup.updateSystemTrayImage();
     }
 
     void updateTime(long elapsedTime) {
-        popup.update(elapsedTime, currentState % 2 == 0 ? "R" : "W");
+        popup.updateView(elapsedTime, currentState % 2 == 0 ? "R" : "W");
     }
 
     public Boolean isRunning() {
