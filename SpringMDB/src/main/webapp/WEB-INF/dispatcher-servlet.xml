@@ -1,0 +1,88 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+        ">
+
+    <context:component-scan base-package="com.sample.spring"/>
+
+    <tx:annotation-driven/>
+
+    <mvc:annotation-driven/>
+
+    <context:property-placeholder location="classpath:config.properties"/>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destinationResolver" ref="jmsDestinationResolver"/>
+        <property name="defaultDestinationName" value="${topic.jndi}"/>
+        <property name="pubSubDomain" value="true" />
+    </bean>
+
+
+    <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+        <property name="environment">
+            <props>
+                <prop key="java.naming.factory.initial">${java.naming.factory.initial}</prop>
+                <prop key="java.naming.provider.url">${java.naming.provider.url}</prop>
+                <prop key="java.naming.factory.url.pkgs">${java.naming.factory.url.pkgs}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="jndiName" value="${connection.factory.jndi}"/>
+    </bean>
+
+    <!--<bean id="topicConnFactory" class="org.springframework.jms.connection.CachingConnectionFactory">-->
+    <!--<property name="targetConnectionFactory" ref="connectionFactory"/>-->
+    <!--<property name="sessionCacheSize" value="2"/>-->
+    <!--</bean>-->
+
+    <bean name="destinationTopic" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="${topic.jndi}"/>
+    </bean>
+
+    <bean id="jmsDestinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="cache" value="true"/>
+    </bean>
+
+    <bean id="jmsSender" class="com.sample.spring.jms.JmsSender">
+        <!--<property name="topic" value="${topic.jndi}"/>-->
+        <!--<property name="connectionFactory" ref="connectionFactory"/>-->
+    </bean>
+
+    <!--<bean id="jmsReceiver" class="com.sample.spring.jms.JmsReceiver">
+    </bean>-->
+<!--
+    <jms:listener-container container-type="default" connection-factory="connectionFactory" acknowledge="auto">
+        <jms:listener destination="${topic.jndi}" ref="jmsReceiver"/>
+    </jms:listener-container>-->
+
+    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <bean id="testMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="concurrentConsumers" value="1"/>
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        <property name="destination" ref="destinationTopic"/>
+        <property name="destinationResolver" ref="jmsDestinationResolver"/>
+        <property name="messageListener" ref="jmsReceiver"/>
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE"/>
+        <property name="pubSubDomain" value="true"/>
+    </bean>
+</beans>
