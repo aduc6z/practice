@@ -29,7 +29,7 @@ public class MessageSenderServices {
     @RequestMapping(value = "/send/{name}", method = RequestMethod.GET)
     @ResponseBody
     String sendMessage(@PathVariable String name) {
-        sender.sendMessage("Name: " + name);
+        sender.sendMessage(String.format("Name: %s", name));
         return "Completed!";
 
     }
