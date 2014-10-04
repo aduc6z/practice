@@ -31,6 +31,5 @@ public class MessageSenderServices {
     String sendMessage(@PathVariable String name) {
         sender.sendMessage(String.format("Name: %s", name));
         return "Completed!";
-
     }
 }
