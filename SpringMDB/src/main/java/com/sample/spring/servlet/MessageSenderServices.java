@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 
 /**
  * Created by Internet on 02/10/14.
@@ -30,6 +31,6 @@ public class MessageSenderServices {
     @ResponseBody
     String sendMessage(@PathVariable String name) {
         sender.sendMessage(String.format("Name: %s", name));
-        return "Completed!";
+        return String.format("Receive a message at %s!", String.valueOf(new Date()));
     }
 }

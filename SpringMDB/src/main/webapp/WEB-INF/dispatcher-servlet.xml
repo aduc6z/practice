@@ -23,10 +23,10 @@
     <context:property-placeholder location="classpath:config.properties"/>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="connectionFactory" ref="sampleDurableTopicConnectionFactory"/>
         <property name="destinationResolver" ref="jmsDestinationResolver"/>
-        <property name="defaultDestinationName" value="${topic.jndi}"/>
-        <property name="pubSubDomain" value="true" />
+        <property name="defaultDestinationName" value="${destination.jndi}"/>
+        <property name="pubSubDomain" value="true"/>
     </bean>
 
 
@@ -35,7 +35,7 @@
             <props>
                 <prop key="java.naming.factory.initial">${java.naming.factory.initial}</prop>
                 <prop key="java.naming.provider.url">${java.naming.provider.url}</prop>
-                <prop key="java.naming.factory.url.pkgs">${java.naming.factory.url.pkgs}</prop>
+                <!--<prop key="java.naming.factory.url.pkgs">${java.naming.factory.url.pkgs}</prop>-->
             </props>
         </property>
     </bean>
@@ -51,7 +51,7 @@
     <!--</bean>-->
 
     <bean name="destinationTopic" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="${topic.jndi}"/>
+        <property name="jndiName" value="${destination.jndi}"/>
     </bean>
 
     <bean id="jmsDestinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver">
@@ -60,29 +60,37 @@
     </bean>
 
     <bean id="jmsSender" class="com.sample.spring.jms.JmsSender">
-        <!--<property name="topic" value="${topic.jndi}"/>-->
+        <!--<property name="topic" value="${destination.jndi}"/>-->
         <!--<property name="connectionFactory" ref="connectionFactory"/>-->
     </bean>
 
     <!--<bean id="jmsReceiver" class="com.sample.spring.jms.JmsReceiver">
     </bean>-->
-<!--
-    <jms:listener-container container-type="default" connection-factory="connectionFactory" acknowledge="auto">
-        <jms:listener destination="${topic.jndi}" ref="jmsReceiver"/>
-    </jms:listener-container>-->
+    <!--
+        <jms:listener-container container-type="default" connection-factory="connectionFactory" acknowledge="auto">
+            <jms:listener destination="${destination.jndi}" ref="jmsReceiver"/>
+        </jms:listener-container>-->
 
     <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
     <bean id="testMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="connectionFactory" ref="sampleDurableTopicConnectionFactory"/>
         <property name="concurrentConsumers" value="1"/>
         <property name="transactionManager" ref="jmsTransactionManager"/>
         <property name="destination" ref="destinationTopic"/>
         <property name="destinationResolver" ref="jmsDestinationResolver"/>
         <property name="messageListener" ref="jmsReceiver"/>
         <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE"/>
+        <property name="subscriptionDurable" value="true"/>
+        <property name="durableSubscriptionName" value="durableClient"/>
         <property name="pubSubDomain" value="true"/>
     </bean>
+
+    <bean id="sampleDurableTopicConnectionFactory"  class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="connectionFactory"/>
+        <property name="clientId" value="sampleClientId"/>
+    </bean>
+
 </beans>

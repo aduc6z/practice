@@ -55,7 +55,7 @@
     </build>
     <properties>
         <spring.version>3.2.5.RELEASE</spring.version>
-        <output.dir>C:/Programs/jboss-5.1.0.GA/server/default/deploy</output.dir>
+        <output.dir>/opt/app/wls1036_dev/user_projects/domains/des_single_domain/autodeploy</output.dir>
         <build.warname>spring-mdp</build.warname>
     </properties>
 </project>
