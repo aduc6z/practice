@@ -22,14 +22,6 @@
 
     <context:property-placeholder location="classpath:config.properties"/>
 
-    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="sampleDurableTopicConnectionFactory"/>
-        <property name="destinationResolver" ref="jmsDestinationResolver"/>
-        <property name="defaultDestinationName" value="${destination.jndi}"/>
-        <property name="pubSubDomain" value="true"/>
-    </bean>
-
-
     <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
         <property name="environment">
             <props>
@@ -59,13 +51,8 @@
         <property name="cache" value="true"/>
     </bean>
 
-    <bean id="jmsSender" class="com.sample.spring.jms.JmsSender">
-        <!--<property name="topic" value="${destination.jndi}"/>-->
-        <!--<property name="connectionFactory" ref="connectionFactory"/>-->
+    <bean id="jmsReceiver" class="com.spring.jms.JmsReceiver">
     </bean>
-
-    <!--<bean id="jmsReceiver" class="com.sample.spring.jms.JmsReceiver">
-    </bean>-->
     <!--
         <jms:listener-container container-type="default" connection-factory="connectionFactory" acknowledge="auto">
             <jms:listener destination="${destination.jndi}" ref="jmsReceiver"/>
@@ -88,7 +75,7 @@
         <property name="pubSubDomain" value="true"/>
     </bean>
 
-    <bean id="sampleDurableTopicConnectionFactory"  class="org.springframework.jms.connection.SingleConnectionFactory">
+    <bean id="sampleDurableTopicConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
         <property name="targetConnectionFactory" ref="connectionFactory"/>
         <property name="clientId" value="sampleClientId"/>
     </bean>

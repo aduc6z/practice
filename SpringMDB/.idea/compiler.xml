@@ -22,7 +22,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="spring.mdb" />
+        <module name="spring.jms.common" />
+        <module name="spring.jms.receiver" />
+        <module name="spring.jms.sender" />
       </profile>
     </annotationProcessing>
   </component>

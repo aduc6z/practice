@@ -30,7 +30,9 @@ public class MessageSenderServices {
     @RequestMapping(value = "/send/{name}", method = RequestMethod.GET)
     @ResponseBody
     String sendMessage(@PathVariable String name) {
-        sender.sendMessage(String.format("Name: %s", name));
-        return String.format("Receive a message at %s!", String.valueOf(new Date()));
+        sender.sendMessage(String.format("Name: %s - send at %s", name, new Date()));
+        String sendMessageReport = String.format("Send a message at %s!", String.valueOf(new Date()));
+        System.out.println(sendMessageReport);
+        return sendMessageReport;
     }
 }

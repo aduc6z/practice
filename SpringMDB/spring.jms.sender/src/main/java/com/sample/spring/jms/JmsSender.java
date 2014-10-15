@@ -5,10 +5,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import javax.jms.*;
 
 /**
  * Created by Internet on 02/10/14.
@@ -28,6 +25,7 @@ public class JmsSender {
                 sb.append('\n');
                 sb.append(content);
                 textMessage.setText(sb.toString());
+                textMessage.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
                 return textMessage;
             }
         });
