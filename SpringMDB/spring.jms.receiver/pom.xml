@@ -58,7 +58,7 @@
     </build>
 
     <properties>
-        <output.dir>/opt/app/wls1036_dev/user_projects/domains/des_single_domain/autodeploy</output.dir>
+        <output.dir>/opt/app/wls1036_dev/user_projects/domains/dev_domain/autodeploy</output.dir>
         <build.warname>spring-mdp-receiver</build.warname>
     </properties>
 

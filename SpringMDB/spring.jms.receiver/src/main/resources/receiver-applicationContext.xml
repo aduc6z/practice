@@ -20,7 +20,7 @@
 
     <mvc:annotation-driven/>
 
-    <context:property-placeholder location="classpath:config.properties"/>
+    <context:property-placeholder location="classpath:receiver-config.properties"/>
 
     <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
         <property name="environment">
@@ -62,6 +62,19 @@
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
+    <!-- Subscription for non durable topic-->
+    <bean id="testMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="concurrentConsumers" value="1"/>
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        <property name="destination" ref="destinationTopic"/>
+        <property name="destinationResolver" ref="jmsDestinationResolver"/>
+        <property name="messageListener" ref="jmsReceiver"/>
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE"/>
+        <property name="pubSubDomain" value="false"/>
+    </bean>
+
+    <!--&lt;!&ndash; Subscription for durable topic&ndash;&gt;
     <bean id="testMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="sampleDurableTopicConnectionFactory"/>
         <property name="concurrentConsumers" value="1"/>
@@ -74,7 +87,7 @@
         <property name="durableSubscriptionName" value="durableClient"/>
         <property name="pubSubDomain" value="true"/>
     </bean>
-
+-->
     <bean id="sampleDurableTopicConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
         <property name="targetConnectionFactory" ref="connectionFactory"/>
         <property name="clientId" value="sampleClientId"/>

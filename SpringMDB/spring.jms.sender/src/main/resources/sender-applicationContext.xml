@@ -20,7 +20,7 @@
 
     <mvc:annotation-driven/>
 
-    <context:property-placeholder location="classpath:config.properties"/>
+    <context:property-placeholder location="classpath:sender-config.properties"/>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <!--<property name="connectionFactory" ref="sampleDurableTopicConnectionFactory"/>-->
@@ -36,7 +36,6 @@
             <props>
                 <prop key="java.naming.factory.initial">${java.naming.factory.initial}</prop>
                 <prop key="java.naming.provider.url">${java.naming.provider.url}</prop>
-                <!--<prop key="java.naming.factory.url.pkgs">${java.naming.factory.url.pkgs}</prop>-->
             </props>
         </property>
     </bean>
@@ -63,9 +62,9 @@
     <bean id="jmsSender" class="com.sample.spring.jms.JmsSender" />
 
 
-    <bean id="sampleDurableTopicConnectionFactory"  class="org.springframework.jms.connection.SingleConnectionFactory">
-        <property name="targetConnectionFactory" ref="connectionFactory"/>
-        <property name="clientId" value="sampleClientId"/>
-    </bean>
+    <!--<bean id="sampleDurableTopicConnectionFactory"  class="org.springframework.jms.connection.SingleConnectionFactory">-->
+        <!--<property name="targetConnectionFactory" ref="connectionFactory"/>-->
+        <!--<property name="clientId" value="sampleClientId"/>-->
+    <!--</bean>-->
 
 </beans>

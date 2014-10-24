@@ -14,7 +14,7 @@ public class JmsReceiver implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        System.out.println(String.format("Receive a message at %s!", new Date()));
+        System.out.println(String.format("RECEIVER --------------- Receive a message at %s!", new Date()));
         if (message instanceof TextMessage) {
             TextMessage textMessage = (TextMessage) message;
             try {
