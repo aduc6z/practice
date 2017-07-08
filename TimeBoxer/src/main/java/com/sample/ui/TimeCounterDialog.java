@@ -20,6 +20,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -104,6 +106,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         );
 
         pack();
+        timer = new UILabelUpdateTimer(1000);
     }// </editor-fold>//GEN-END:initComponents
 
     private void pauseResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseResumeButtonActionPerformed
@@ -124,6 +127,11 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         this.setVisible(false);
     }//GEN-LAST:event_nextButtonActionPerformed
 
+    public void setVisible(boolean isVisible ) {
+        super.setVisible(isVisible);
+        System.out.println("Hide dialog!");
+        timer.stop();
+    }
     /**
      * @param args the command line arguments
      */
@@ -159,6 +167,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
                 AppState appState = new AppState(dialog);
                 AppController controller = new AppController(appState);
                 dialog.controller = controller;
+                dialog.appState = appState;
                 dialog.createSystemTray();
                 controller.nextClick();
             }
@@ -184,7 +193,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
 //        System.out.println("Update title");
 //        System.out.println("isTrayOnFocus = " + isTrayOnFocus);
 //        System.out.println("this.isVisible() = " + this.isVisible());
-        long elapsedTime = appState.getRemainingTime();
+        long elapsedTime = appState.getStartTime();
         String status = appState.getState().toString();
         String label = status + " --- " + getTimeInString(elapsedTime);
         if (this.isVisible()) {
@@ -198,6 +207,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
 
     AppController controller;
     AppState appState;
+    UILabelUpdateTimer timer;
 
     private void enableNext() {
         nextButton.setEnabled(true);
@@ -370,6 +380,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         toFront();
         requestFocus();
         repaint();
+        timer.startTask();
     }
 
     public void handleActiveStateChange() {
@@ -388,5 +399,37 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
 //        System.out.println("handle time change");
         updateTitle();
 //        System.out.println("appState = " + appState);
+    }
+
+    class UILabelUpdateTimer {
+
+        boolean isRunning;
+        long updateInterval;
+        TimerTask updateTask;
+        Timer timer;
+
+        UILabelUpdateTimer(long updateInterval) {
+            this.updateInterval = updateInterval;
+            timer = new Timer();
+        }
+
+        void startTask() {
+            updateTask = new TimeCounter();
+            timer.schedule(updateTask, 0, updateInterval);
+            isRunning = true;
+        }
+
+        void stop() {
+            isRunning = false;
+            updateTask.cancel();
+        }
+
+        class TimeCounter extends TimerTask {
+
+            @Override
+            public void run() {
+                updateTitle();
+            }
+        }
     }
 }

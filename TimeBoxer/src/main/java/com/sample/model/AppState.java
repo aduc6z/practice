@@ -1,7 +1,5 @@
 package com.sample.model;
 
-import com.sample.ui.TimeCounterDialog;
-
 /**
  * Created by dn5970 on 7/7/17.
  */
@@ -24,7 +22,7 @@ public class AppState {
     final boolean measureInMinutes = true; // false = measure in seconds
 
     boolean timerRunning;
-    long remainingTime;
+    long startTime;
     StateEnum state;
 
     StateChangeListener stateChangeListener;
@@ -66,22 +64,22 @@ public class AppState {
     }
 
     public void resetTime() {
-        remainingTime = state.getTime() * (measureInMinutes ? 60 * 1000 : 1000);
+        startTime = System.currentTimeMillis();
     }
 
-    public void reduceRemainingTime(long step) {
-//        System.out.println("Reduce remaining time");
-        if (remainingTime > step) {
-            remainingTime -= step;
-            stateChangeListener.handleTimeChange();
-        } else {
-            remainingTime = 0;
-            switchRunningState();
-        }
-    }
+//    public void reduceRemainingTime(long step) {
+////        System.out.println("Reduce remaining time");
+//        if (startTime > step) {
+//            startTime -= step;
+//            stateChangeListener.handleTimeChange();
+//        } else {
+//            startTime = 0;
+//            switchRunningState();
+//        }
+//    }
 
-    public long getRemainingTime() {
-        return remainingTime;
+    public long getStartTime() {
+        return startTime;
     }
 
     @Override
@@ -89,7 +87,7 @@ public class AppState {
         return "AppState{" +
                 "measureInMinutes=" + measureInMinutes +
                 ", timerRunning=" + timerRunning +
-                ", remainingTime=" + remainingTime +
+                ", startTime=" + startTime +
                 ", state=" + state +
                 '}';
     }

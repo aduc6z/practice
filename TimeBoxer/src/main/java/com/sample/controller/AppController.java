@@ -36,15 +36,15 @@ public class AppController implements UIActionListener {
 
     public void nextClick() {
         appState.changeToNextActiveState();
-        startNewCounterTask();
+        startCountdownTask();
     }
 
-    private void startNewCounterTask() {
+    private void startCountdownTask() {
         if (controlTimer != null) {
             controlTimer.cancel();
         }
         controlTimer = new Timer();
-        controlTimer.schedule(new TimeCounter(), 0, sleepStep);
+        controlTimer.schedule(new TimeCounter(), appState.getState().getTime() * 60 * 1000);
     }
 
     class TimeCounter extends TimerTask {
@@ -54,7 +54,7 @@ public class AppController implements UIActionListener {
 //            System.out.println("Task execute:");
 //            System.out.println("appState = " + appState);
             if (appState.getState() != AppState.StateEnum.PAUSE) {
-                appState.reduceRemainingTime(sleepStep);
+                appState.switchRunningState();
             }
         }
     }
