@@ -159,8 +159,8 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
                 AppState appState = new AppState(dialog);
                 AppController controller = new AppController(appState);
                 dialog.controller = controller;
-                dialog.appState = appState;
                 dialog.createSystemTray();
+                controller.nextClick();
             }
         });
     }
@@ -199,11 +199,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
     AppController controller;
     AppState appState;
 
-    public void setController(AppController controller) {
-        this.controller = controller;
-    }
-
-    public void enableNext() {
+    private void enableNext() {
         nextButton.setEnabled(true);
         pauseResumeButton.setEnabled(false);
     }
@@ -242,8 +238,15 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
             System.err.println("System does not support tray!");
             return;
         }
+        try {
+
+
         Image image = createImage(getResourcePath(appState.getState()), "");
         trayIcon.setImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("controller = " + controller);
+        }
     }
 
     private String getResourcePath(AppState.StateEnum state) {
@@ -341,7 +344,6 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                updateTitle();
                 if (e.getClickCount() > 1) {
                     showDialog();
                 }

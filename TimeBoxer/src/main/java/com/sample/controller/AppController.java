@@ -23,7 +23,6 @@ public class AppController implements UIActionListener {
 
     public AppController(AppState appState) {
         this.appState = appState;
-        startNewCounterTask();
         System.out.println("Finished initialized controller");
     }    
 
