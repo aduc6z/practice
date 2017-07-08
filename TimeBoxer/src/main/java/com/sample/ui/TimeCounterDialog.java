@@ -10,13 +10,12 @@ import com.sample.controller.AppController;
 import com.sample.model.AppState;
 import com.sample.model.StateChangeListener;
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.*;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +23,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -106,7 +104,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         );
 
         pack();
-        timer = new UILabelUpdateTimer(1000);
+        uiLabelUpdateTimer = new UILabelUpdateTimer(1000);
     }// </editor-fold>//GEN-END:initComponents
 
     private void pauseResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseResumeButtonActionPerformed
@@ -130,7 +128,12 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
     public void setVisible(boolean isVisible ) {
         super.setVisible(isVisible);
         System.out.println("Hide dialog!");
-        timer.stop();
+        if (isVisible) {
+            uiLabelUpdateTimer.startTask();
+        } else {
+            uiLabelUpdateTimer.stop();
+        }
+
     }
     /**
      * @param args the command line arguments
@@ -139,7 +142,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -169,7 +172,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
                 dialog.controller = controller;
                 dialog.appState = appState;
                 dialog.createSystemTray();
-                controller.nextClick();
+                controller.startCountdownTask();
             }
         });
     }
@@ -193,7 +196,9 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
 //        System.out.println("Update title");
 //        System.out.println("isTrayOnFocus = " + isTrayOnFocus);
 //        System.out.println("this.isVisible() = " + this.isVisible());
-        long elapsedTime = appState.getStartTime();
+        if (appState == null) return;
+        long elapsedTime = appState.getElapsedTime();
+        System.out.println("elapsedTime = " + elapsedTime);
         String status = appState.getState().toString();
         String label = status + " --- " + getTimeInString(elapsedTime);
         if (this.isVisible()) {
@@ -207,7 +212,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
 
     AppController controller;
     AppState appState;
-    UILabelUpdateTimer timer;
+    UILabelUpdateTimer uiLabelUpdateTimer;
 
     private void enableNext() {
         nextButton.setEnabled(true);
@@ -284,7 +289,7 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         registerMenuListener(nextItem, pauseResumeItem, exitItem);
         registerMouseEventHandlerForSystemTray(trayIcon);
         popupMenu = new PopupMenu();
-        popupMenu.add(placeHolder);
+//        popupMenu.add(placeHolder);
         popupMenu.add(nextItem);
         popupMenu.add(pauseResumeItem);
 //      popupMenu.add(configItem);
@@ -380,7 +385,6 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
         toFront();
         requestFocus();
         repaint();
-        timer.startTask();
     }
 
     public void handleActiveStateChange() {
@@ -390,9 +394,14 @@ public class TimeCounterDialog extends javax.swing.JFrame implements StateChange
     }
 
     public void handleTimerToggle() {
-//        System.out.println("Handle timer toggle");
+//        System.out.println("Handle uiLabelUpdateTimer toggle");
 //        System.out.println("appState = " + appState);
         updateSystemTrayImage();
+        if (appState.getState() == AppState.StateEnum.PAUSE) {
+            uiLabelUpdateTimer.stop();
+        } else {
+            uiLabelUpdateTimer.startTask();
+        }
     }
 
     public void handleTimeChange() {

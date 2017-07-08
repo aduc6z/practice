@@ -14,7 +14,7 @@ import java.util.TimerTask;
 
 /**
  *
- * 
+ *
  */
 public class AppController implements UIActionListener {
     AppState appState;
@@ -24,7 +24,7 @@ public class AppController implements UIActionListener {
     public AppController(AppState appState) {
         this.appState = appState;
         System.out.println("Finished initialized controller");
-    }    
+    }
 
     public void pauseResumeClick() {
         appState.switchRunningState();
@@ -39,7 +39,7 @@ public class AppController implements UIActionListener {
         startCountdownTask();
     }
 
-    private void startCountdownTask() {
+    public void startCountdownTask() {
         if (controlTimer != null) {
             controlTimer.cancel();
         }

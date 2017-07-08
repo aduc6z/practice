@@ -24,6 +24,8 @@ public class AppState {
     boolean timerRunning;
     long startTime;
     StateEnum state;
+    long pauseTime;
+    long pausePoint;
 
     StateChangeListener stateChangeListener;
 
@@ -32,10 +34,14 @@ public class AppState {
         timerRunning = true;
         state = StateEnum.WORKING;
         resetTime();
+        pauseTime = 0;
     }
 
     public void switchRunningState() {
         timerRunning = !timerRunning;
+        pauseTime = timerRunning ? 0 : System.currentTimeMillis();
+        System.out.println("Switch running state");
+        System.out.println("pauseTime = " + pauseTime);
         stateChangeListener.handleTimerToggle();
     }
 
@@ -67,19 +73,14 @@ public class AppState {
         startTime = System.currentTimeMillis();
     }
 
-//    public void reduceRemainingTime(long step) {
-////        System.out.println("Reduce remaining time");
-//        if (startTime > step) {
-//            startTime -= step;
-//            stateChangeListener.handleTimeChange();
-//        } else {
-//            startTime = 0;
-//            switchRunningState();
-//        }
-//    }
-
     public long getStartTime() {
         return startTime;
+    }
+
+    public long getElapsedTime() {
+        System.out.println("pauseTime = " + pauseTime);
+        return state.getTime() * 60 * 1000 - (System.currentTimeMillis() - startTime)
+                + pauseTime;
     }
 
     @Override
