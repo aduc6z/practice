@@ -6,65 +6,58 @@
 
 package com.sample.controller;
 
-import com.sample.ui.TimeCounterDialog;
+import com.sample.model.AppState;
+import com.sample.ui.UIActionListener;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
  * 
  */
-public class AppController {
-    AppTimer controlTimer;
-    int currentState;
-    Boolean running;
-    TimeCounterDialog popup;
-    
-    public AppController(TimeCounterDialog popupDialog) {
-        currentState = 1;
-        running = true;
-        this.popup = popupDialog;
-        controlTimer = new AppTimer(this, currentState);
-        controlTimer.start();
+public class AppController implements UIActionListener {
+    AppState appState;
+    Timer controlTimer;
+    long sleepStep = 1000;
+
+    public AppController(AppState appState) {
+        this.appState = appState;
+        startNewCounterTask();
         System.out.println("Finished initialized controller");
     }    
-    
-    public void stop() {
-        switchState();
-        popup.showDialog();       
-        popup.enableNext();
-        running = false;
-        popup.updateSystemTrayImage();
-    }
-    
-    private void switchState() {
-        currentState = currentState % 2 == 0 ? 1 : 0;
-        popup.setTitle(currentState % 2 == 0 ? "R" : "W");
-        controlTimer.cancel();
-    }
-           
-    public void start() {
-        if (running) switchState();
-        controlTimer.cancel();
-        controlTimer = new AppTimer(this, currentState);
-        controlTimer.start(); 
-        running = true;
-        popup.updateSystemTrayImage();
-    }
-    
-    public void toggleRunningState() {
-        running = !running;
-        popup.updateSystemTrayImage();
+
+    public void pauseResumeClick() {
+        appState.switchRunningState();
     }
 
-    void updateTime(long elapsedTime) {
-        popup.updateView(elapsedTime, currentState % 2 == 0 ? "R" : "W");
+    public void restartClick() {
+        appState.resetTime();
     }
 
-    public Boolean isRunning() {
-        return running;
+    public void nextClick() {
+        appState.changeToNextActiveState();
+        startNewCounterTask();
     }
 
-    public int getState() {
-        return currentState;
+    private void startNewCounterTask() {
+        if (controlTimer != null) {
+            controlTimer.cancel();
+        }
+        controlTimer = new Timer();
+        controlTimer.schedule(new TimeCounter(), 0, sleepStep);
     }
-   
+
+    class TimeCounter extends TimerTask {
+
+        @Override
+        public void run() {
+//            System.out.println("Task execute:");
+//            System.out.println("appState = " + appState);
+            if (appState.getState() != AppState.StateEnum.PAUSE) {
+                appState.reduceRemainingTime(sleepStep);
+            }
+        }
+    }
+
 }

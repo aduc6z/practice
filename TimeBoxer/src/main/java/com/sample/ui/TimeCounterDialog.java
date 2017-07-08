@@ -7,17 +7,16 @@
 package com.sample.ui;
 
 import com.sample.controller.AppController;
-import com.sample.controller.AppTimer;
+import com.sample.model.AppState;
+import com.sample.model.StateChangeListener;
+
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +27,7 @@ import javax.imageio.ImageIO;
 /**
  *
  */
-public class TimeCounterDialog extends javax.swing.JFrame {
+public class TimeCounterDialog extends javax.swing.JFrame implements StateChangeListener {
 
     /**
      * Creates new form Popup
@@ -78,52 +77,50 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(74, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pauseResumeButton)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(elapsedTimeLabel)
-                    .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(74, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(pauseResumeButton)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(35, 35, 35)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(elapsedTimeLabel)
+                                        .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(52, 52, 52))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(elapsedTimeLabel))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pauseResumeButton)
-                    .addComponent(nextButton))
-                .addContainerGap(53, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(elapsedTimeLabel))
+                                .addGap(27, 27, 27)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(pauseResumeButton)
+                                        .addComponent(nextButton))
+                                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void pauseResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseResumeButtonActionPerformed
-        controller.toggleRunningState();
+        controller.pauseResumeClick();
         nextButton.setEnabled(false);
         updateSystemTrayImage();
-//        System.out.println("Event: " + evt.getActionCommand());
-        pauseResumeButton.setSelected(!controller.isRunning());       
-        nextItem.setEnabled(controller.isRunning());
-        restartItem.setEnabled(controller.isRunning());
+        pauseResumeButton.setSelected(!appState.isTimerRunning());
+        nextItem.setEnabled(!pauseResumeButton.isSelected());
+        restartItem.setEnabled(!pauseResumeButton.isSelected());
     }//GEN-LAST:event_pauseResumeButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        this.controller.start();
-//        trayIcon.setImage(createImage(getResourcePath(this.controller.getState()), "Image description"));
+        this.controller.nextClick();
         updateSystemTrayImage();
         nextButton.setEnabled(false);
         nextItem.setEnabled(true);
-        pauseResumeButton.setEnabled(true);        
+        pauseResumeButton.setEnabled(true);
         this.setVisible(false);
     }//GEN-LAST:event_nextButtonActionPerformed
 
@@ -159,9 +156,11 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             public void run() {
                 TimeCounterDialog dialog = new TimeCounterDialog();
                 dialog.setVisible(true);
-                AppController controller = new AppController(dialog);
-                dialog.setController(controller);
-                dialog.createSystemTray(AppTimer.WORK);
+                AppState appState = new AppState(dialog);
+                AppController controller = new AppController(appState);
+                dialog.controller = controller;
+                dialog.appState = appState;
+                dialog.createSystemTray();
             }
         });
     }
@@ -181,15 +180,24 @@ public class TimeCounterDialog extends javax.swing.JFrame {
         return String.valueOf(timeInMinutes) + ":" + String.valueOf(seconds);
     }
 
-    public void updateView(long elapsedTime, String status) {
-        elapsedTimeLabel.setText(getTimeInString(elapsedTime));
-        placeHolder.setLabel(status + " --- " + getTimeInString(elapsedTime));
+    private void updateTitle() {
+//        System.out.println("Update title");
+//        System.out.println("isTrayOnFocus = " + isTrayOnFocus);
+//        System.out.println("this.isVisible() = " + this.isVisible());
+        long elapsedTime = appState.getRemainingTime();
+        String status = appState.getState().toString();
+        String label = status + " --- " + getTimeInString(elapsedTime);
+        if (this.isVisible()) {
+            elapsedTimeLabel.setText(getTimeInString(elapsedTime));
+        }
         if (trayIcon != null) {
-            trayIcon.setToolTip(status + " --- " + getTimeInString(elapsedTime));
+            trayIcon.setToolTip(label);
+            placeHolder.setLabel(label);
         }
     }
 
     AppController controller;
+    AppState appState;
 
     public void setController(AppController controller) {
         this.controller = controller;
@@ -201,7 +209,7 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     }
 
     PopupMenu popupMenu;
-    MenuItem placeHolder = new MenuItem();
+    MenuItem placeHolder = new MenuItem("-----");
     TrayIcon trayIcon;
     MenuItem configItem = new MenuItem("Configure");
     MenuItem nextItem = new MenuItem("Next");
@@ -209,86 +217,84 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     MenuItem restartItem = new MenuItem("Restart");
     MenuItem exitItem = new MenuItem("Exit");
 
-    private void createSystemTray(int state) {
+    boolean isTrayOnFocus = false;
+
+    private void createSystemTray() {
         if (!SystemTray.isSupported()) {
             System.err.println("System does not support tray!");
             return;
         }
-        final SystemTray tray = SystemTray.getSystemTray();        
+        final SystemTray tray = SystemTray.getSystemTray();
         if (trayIcon != null) {
             tray.remove(trayIcon);
         }
-        trayIcon = createTrayIcon(getResourcePath(state), "tray icon");
+        trayIcon = createTrayIcon(getResourcePath(this.appState.getState()), "tray icon");
         try {
             tray.add(trayIcon);
         } catch (AWTException ex) {
             Logger.getLogger(TimeCounterDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
-    
+
     public void updateSystemTrayImage() {
         if (!SystemTray.isSupported()) {
             System.err.println("System does not support tray!");
             return;
         }
-        Image image = createImage(getResourcePath(controller.isRunning() ? controller.getState() : AppTimer.PAUSE), "");
+        Image image = createImage(getResourcePath(appState.getState()), "");
         trayIcon.setImage(image);
     }
-    
-    private String getResourcePath(int state) {
+
+    private String getResourcePath(AppState.StateEnum state) {
         String resourcePath = null;
-        switch(state) {
-            case AppTimer.REST:
+        switch (state) {
+            case REST:
                 resourcePath = "/resources/standby.jpeg";
                 break;
-            case AppTimer.WORK:
+            case WORKING:
                 resourcePath = "/resources/index.jpeg";
                 break;
-            case AppTimer.PAUSE:
+            case PAUSE:
                 resourcePath = "/resources/stop.png";
                 break;
             default:
-                throw new RuntimeException("Unsupported state!");
+                throw new RuntimeException("Unsupported appState!");
         }
         return resourcePath;
     }
-    
-    TrayIcon createTrayIcon(String resourcePath, String trayName) {
+
+    private TrayIcon createTrayIcon(String resourcePath, String trayName) {
         System.out.println("Create icon from " + resourcePath);
         trayIcon = new TrayIcon(createImage(resourcePath, trayName));
-        trayIcon.setImageAutoSize(true);    
+        trayIcon.setImageAutoSize(true);
         registerMenuListener(nextItem, pauseResumeItem, exitItem);
-        registerMouseEvenForSystemTray(trayIcon);
+        registerMouseEventHandlerForSystemTray(trayIcon);
         popupMenu = new PopupMenu();
         popupMenu.add(placeHolder);
         popupMenu.add(nextItem);
         popupMenu.add(pauseResumeItem);
+//      popupMenu.add(configItem);
         popupMenu.add(restartItem);
-        popupMenu.add(configItem);
-        popupMenu.add(exitItem);        
+        popupMenu.add(exitItem);
         trayIcon.setPopupMenu(popupMenu);
         return trayIcon;
     }
 
     private void registerMenuListener(MenuItem nextItem, MenuItem pauseResumeItem, MenuItem exitItem) {
         nextItem.addActionListener(new ActionListener() {
-
-            @Override
             public void actionPerformed(ActionEvent e) {
                 nextButtonActionPerformed(e);
                 System.out.println("Call next button");
             }
         });
         pauseResumeItem.addActionListener(new ActionListener() {
-
-            @Override
             public void actionPerformed(ActionEvent e) {
                 pauseResumeButtonActionPerformed(e);
             }
         });
         exitItem.addActionListener(new ActionListener() {
 
-            @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
@@ -301,13 +307,12 @@ public class TimeCounterDialog extends javax.swing.JFrame {
 
         });
     }
-    
+
     private void restartButtonActionPerformed(ActionEvent e) {
-        nextButtonActionPerformed(e);
-        nextButtonActionPerformed(e);
+        controller.restartClick();
     }
 
-    protected static Image createImage(String path, String description) {
+    private static Image createImage(String path, String description) {
         URL imageURL = TimeCounterDialog.class.getResource(path);
 
         if (imageURL == null) {
@@ -325,20 +330,31 @@ public class TimeCounterDialog extends javax.swing.JFrame {
             return image;
         }
     }
-    
+
     /**
      * Handle double click
      *
      * @param trayIcon
      */
-    void registerMouseEvenForSystemTray(TrayIcon trayIcon) {
+    private void registerMouseEventHandlerForSystemTray(TrayIcon trayIcon) {
         trayIcon.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                updateTitle();
                 if (e.getClickCount() > 1) {
                     showDialog();
                 }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                System.out.println("Mouse entered---");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                System.out.println("Mouse exited");
             }
         });
     }
@@ -346,11 +362,29 @@ public class TimeCounterDialog extends javax.swing.JFrame {
     /**
      * Customized method to ensure the dialog is brought to front
      * even when there is focus stealing
-     * */
+     */
     public void showDialog() {
         setVisible(true);
         toFront();
         requestFocus();
         repaint();
+    }
+
+    public void handleActiveStateChange() {
+//        System.out.println("Handle active state change");
+//        System.out.println("appState = " + appState);
+        updateSystemTrayImage();
+    }
+
+    public void handleTimerToggle() {
+//        System.out.println("Handle timer toggle");
+//        System.out.println("appState = " + appState);
+        updateSystemTrayImage();
+    }
+
+    public void handleTimeChange() {
+//        System.out.println("handle time change");
+        updateTitle();
+//        System.out.println("appState = " + appState);
     }
 }

@@ -36,15 +36,6 @@
                             <mainClass>com.sample.ui.TimeCounterDialog</mainClass>               
                         </manifest>           
                     </archive>
-                    <executions>
-                        <execution>
-                            <id>default-package</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </configuration>
             </plugin>
         </plugins>	
